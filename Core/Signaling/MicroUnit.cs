@@ -9,14 +9,12 @@ public class MicroUnit : MicroUnitRom
     private ushort currentCycle;
     
     private bool INTERRUPT;
-    private bool TRAPS;
+    private bool TRAP;
 
     public SignalSet Emit(ushort ir)
     {
         if (INTERRUPT)
-        {
             return new SignalSet();
-        }
 
         if (decoded.MicroCycles[currentCycle] is MicroCycle.DECODE)
         {
@@ -30,17 +28,17 @@ public class MicroUnit : MicroUnitRom
     public void Advance()
     {
         if (INTERRUPT)
-        {
             return;
-        }
+
+        if (ToggleCycles.Contains(decoded.MicroCycles[currentCycle]))
+            registersIndex = (byte)(registersIndex == 0 ? 1 : 0);
 
         if (currentCycle == decoded.MicroCycles.Count - 1)
         {
+            registersIndex = 0;
             currentCycle = 0;
         }
         else
-        {
             currentCycle++;
-        }
     }
 }

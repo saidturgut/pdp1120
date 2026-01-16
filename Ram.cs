@@ -11,11 +11,10 @@ public class Ram
         if(uniBus.GetAddress() >= 0x8000)
             return;
 
-        uniBus.SetData((ushort)
-            (Memory[uniBus.GetAddress()] | (Memory[uniBus.GetAddress() + 1] << 8)));
+        uniBus.SetData(ReadWord(uniBus.GetAddress()));
     }
     
-    public ushort ReadWord(ushort address)
+    private ushort ReadWord(ushort address)
     {
         if (address % 2 != 0)
         {
@@ -25,7 +24,7 @@ public class Ram
         return (ushort)(Memory[address] | (Memory[address + 1] << 8));
     }
 
-    public void WriteWord(ushort address, ushort value)
+    private void WriteWord(ushort address, ushort value)
     {
         if (address % 2 != 0)
         {
@@ -36,10 +35,10 @@ public class Ram
         Memory[address + 1] = (byte)(value >> 6);
     }
 
-    public byte ReadByte(ushort address) 
+    private byte ReadByte(ushort address) 
         => Memory[address];
 
-    public void WriteByte(ushort address, byte value)
+    private void WriteByte(ushort address, byte value)
     {
         Memory[address] = value;
     }

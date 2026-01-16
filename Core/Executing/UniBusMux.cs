@@ -7,10 +7,10 @@ public partial class DataPath
 {
     public void UniBusLatch(UniBus uniBus)
     {
-        if(!signals.UniBusLatch)
+        if(signals.UniBusLatching is UniBusLatching.NONE)
             return;
 
-        if (uniBus.requesters[(ushort)requesterIndex] != null)
+        if (uniBus.requesters[(ushort)requesterType] != null)
         {
             STALL = true;
             return;
@@ -22,16 +22,16 @@ public partial class DataPath
     
     public void UniBusDrive(UniBus uniBus)
     {
-        if(signals.UniBusDrive is UniBusAction.NONE)
+        if(signals.UniBusDriving is UniBusDriving.NONE)
             return;
 
         Request request = new Request
         {
-            Requester = (byte)requesterIndex,
+            Requester = (byte)requesterType,
             Address = Access(RegisterAction.MAR).Get(),
         };
 
-        if (signals.UniBusDrive == UniBusAction.WRITE)
+        if (signals.UniBusDriving == UniBusDriving.WRITE)
             request.Data = Access(RegisterAction.TMP).Get();
         
         uniBus.Request(request);

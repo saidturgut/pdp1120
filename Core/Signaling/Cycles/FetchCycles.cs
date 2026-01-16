@@ -1,4 +1,5 @@
 namespace pdp11_emulator.Core.Signaling.Cycles;
+using Executing.Computing;
 
 public partial class MicroUnitRom
 {
@@ -8,7 +9,7 @@ public partial class MicroUnitRom
     {
         CpuBusDriver = RegisterAction.R7,
         CpuBusLatcher = RegisterAction.MAR,
-        UniBusDrive = UniBusAction.READ,
+        UniBusDriving = UniBusDriving.READ,
     };
 
     private static SignalSet PC_INC() => new()
@@ -21,7 +22,7 @@ public partial class MicroUnitRom
 
     private static SignalSet FETCH_MDR() => new()
     {
-        UniBusLatch = true,
+        UniBusLatching = UniBusLatching.READ_WORD,
         CpuBusDriver = RegisterAction.MAR,
         CpuBusLatcher = RegisterAction.IR,
     };

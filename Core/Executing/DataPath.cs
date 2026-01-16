@@ -19,12 +19,14 @@ public partial class DataPath
         new (), // MDR * 8
         new (), // IR * 9
         new (), // MAR * 10
+        
         new (), // TMP * 11
+        new (), // DST * 12
     ];
     
     private SignalSet signals;
 
-    private const Requester requesterIndex = Requester.CPU;
+    private const Requester requesterType = Requester.CPU;
     public bool STALL;
     
     public void Init()
@@ -55,5 +57,6 @@ public partial class DataPath
         Console.WriteLine($"IR: {Access(RegisterAction.IR).Get()}");
         Console.WriteLine($"MAR: {Access(RegisterAction.MAR).Get()}");
         Console.WriteLine($"TMP: {Access(RegisterAction.TMP).Get()}");
+        Console.WriteLine($"DST: {Access(RegisterAction.DST).Get()}");
     }
 }

@@ -1,0 +1,53 @@
+namespace pdp11_emulator.Core.Decoding.Multiplexer;
+using Executing.Computing;
+using Signaling.Cycles;
+using Signaling;
+
+public partial class DecoderMux
+{
+    protected Decoded DOUBLE_OPERAND(ushort opcode)
+    {
+        byte operation = (byte)((opcode & 0xF000) >> 12);
+        bool byteMode =  ((opcode >> 11) & 0x1) == 1;
+        
+        Decoded decoded = new()
+        {
+            Drivers = [(RegisterAction)((opcode >> 6)  & 0x7), 
+                (RegisterAction)(opcode & 0x7)],
+            AluOperation = DoubleOperandTable[operation]
+        };
+
+        DoubleOperandType type = (DoubleOperandType)operation;
+
+        // EFFECTIVE ADDRESS ENGINE
+        if (type is not (DoubleOperandType.ADD or DoubleOperandType.SUB))
+            decoded.StepSize = (byte)(byteMode ? 1 : 2);
+        
+        decoded.MicroCycles.AddRange(EaEngine[(opcode >> 9)  & 0x3]);
+        decoded.MicroCycles.AddRange(EaEngine[(opcode >> 3)  & 0x7]);
+
+        // EXECUTE ENGINE
+        if (type is not DoubleOperandType.MOV)
+            decoded.MicroCycles.Add(MicroCycle.ALU_EXECUTE);
+
+        // WRITE BACK ENGINE
+        if (type is not (DoubleOperandType.CMP or DoubleOperandType.BIT))
+            decoded.MicroCycles.Add(MicroCycle.WRITE_BACK);
+        
+        return decoded;
+    }
+
+    private enum DoubleOperandType
+    {
+        MOV, CMP, BIT, BIC, BIS, ADD, SUB
+    }
+
+    public AluOperation[] DoubleOperandTable =
+    [
+        AluOperation.NONE,
+        AluOperation.ADD,
+        AluOperation.SUB, AluOperation.SUB,
+        AluOperation.AND, AluOperation.AND,
+        AluOperation.OR,
+    ];
+}

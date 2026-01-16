@@ -1,4 +1,5 @@
 namespace pdp11_emulator.Core.Decoding;
+using Multiplexer;
 
 public class Decoder : DecoderMux
 {
