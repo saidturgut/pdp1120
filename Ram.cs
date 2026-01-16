@@ -1,9 +1,20 @@
+using pdp11_emulator.Core.Executing.Components;
+
 namespace pdp11_emulator;
 
 public class Ram
 {
     private readonly byte[] Memory = new byte[256];
 
+    public void Respond(UniBus uniBus)
+    {
+        if(uniBus.GetAddress() >= 0x8000)
+            return;
+
+        uniBus.SetData((ushort)
+            (Memory[uniBus.GetAddress()] | (Memory[uniBus.GetAddress() + 1] << 8)));
+    }
+    
     public ushort ReadWord(ushort address)
     {
         if (address % 2 != 0)

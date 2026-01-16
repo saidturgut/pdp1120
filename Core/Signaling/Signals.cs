@@ -1,8 +1,8 @@
-namespace pdp11_emulator.Core.Signaling.Cycles;
+namespace pdp11_emulator.Core.Signaling;
 
 public struct SignalSet()
 {
-    public UniBusAction UniBusLatch = UniBusAction.NONE; // MDR
+    public bool UniBusLatch = false; // MDR
     public RegisterAction CpuBusDriver = RegisterAction.NONE;
     public AluAction? AluAction = null;
     public RegisterAction CpuBusLatcher = RegisterAction.NONE;
@@ -29,7 +29,7 @@ public enum AluOperation
 
 public enum RegisterAction
 {
-    NONE,
-    R0, R1, R2, R3, R4, R5, R6, R7,
-    IR, MDR, MAR, TMP,
+    R0 = 0, R1 = 1, R2 = 2, R3 = 3, R4 = 4, R5 = 5, R6 = 6, R7 = 7,
+    MDR = 8, IR = 9, MAR = 10, TMP = 11,
+    NONE = 12,
 }

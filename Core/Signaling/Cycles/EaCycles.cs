@@ -40,7 +40,7 @@ public partial class MicroUnitRom
     };
     private static SignalSet EA_INDEX_MDR() => new()
     {
-        UniBusLatch = UniBusAction.READ,
+        UniBusLatch = true,
         CpuBusDriver = RegisterAction.MDR,
         AluAction = new AluAction(AluOperation.ADD, 
             decoded.Registers[currentRegister], 0),
@@ -50,14 +50,14 @@ public partial class MicroUnitRom
     
     private static SignalSet EA_RAM_MAR() => new()
     {
-        UniBusLatch = UniBusAction.READ,
+        UniBusLatch = true,
         CpuBusDriver = RegisterAction.MDR,
         CpuBusLatcher = RegisterAction.MAR,
         UniBusDrive = UniBusAction.READ,
     };
     private static SignalSet EA_RAM_MDR() => new()
     {
-        UniBusLatch = UniBusAction.READ,
+        UniBusLatch = true,
         CpuBusDriver = RegisterAction.MDR,
         CpuBusLatcher = RegisterAction.TMP,
     };// EXIT

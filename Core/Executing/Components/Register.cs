@@ -4,7 +4,7 @@ public class Register()
 {
     private ushort value;
     
-    public void Set(byte input) 
+    public void Set(ushort input) 
         => value = input;
 
     public ushort Get() 

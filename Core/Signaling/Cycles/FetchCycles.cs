@@ -21,7 +21,7 @@ public partial class MicroUnitRom
 
     private static SignalSet FETCH_MDR() => new()
     {
-        UniBusLatch = UniBusAction.READ,
+        UniBusLatch = true,
         CpuBusDriver = RegisterAction.MAR,
         CpuBusLatcher = RegisterAction.IR,
     };

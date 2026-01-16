@@ -7,24 +7,29 @@ public class MicroUnit : MicroUnitRom
     private readonly Decoder Decoder = new();
     
     private ushort currentCycle;
-    private bool interrupt;
+    
+    private bool INTERRUPT;
+    private bool TRAPS;
 
-    public SignalSet Emit()
+    public SignalSet Emit(ushort ir)
     {
-        if (interrupt)
+        if (INTERRUPT)
         {
+            return new SignalSet();
+        }
+
+        if (decoded.MicroCycles[currentCycle] is MicroCycle.DECODE)
+        {
+            decoded = Decoder.Decode(ir);
             return new SignalSet();
         }
 
         return MicroCycles[(int)decoded.MicroCycles[currentCycle]]();
     }
-
-    public void Decode(ushort ir)
-        => decoded = Decoder.Decode(ir);
-
+    
     public void Advance()
     {
-        if (interrupt)
+        if (INTERRUPT)
         {
             return;
         }

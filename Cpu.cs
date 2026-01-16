@@ -16,12 +16,21 @@ public class Cpu
         DataPath.Init();
     }
     
-    public void Tick(TriStateBus uniBus)
+    public void Tick(UniBus uniBus)
     {
-        // UNIBUS_LATCH
-        // CPUBUS_DRIVE
-        // ALU_COMPUTE
-        // CPUBUS_LATCH
-        // UNIBUS_DRIVE
+        DataPath.Clear(CpuBus, AluBus);
+        DataPath.Receive(
+        MicroUnit.Emit(DataPath.GetIr()));
+        
+        DataPath.UniBusLatch(uniBus);
+        if(DataPath.STALL) return;
+        DataPath.CpuBusDrive(CpuBus);
+        DataPath.AluAction(CpuBus, AluBus);
+        DataPath.CpuBusLatch(CpuBus, AluBus);
+        DataPath.UniBusDrive(uniBus);
+
+        DataPath.Debug();
+        
+        MicroUnit.Advance();
     }
 }

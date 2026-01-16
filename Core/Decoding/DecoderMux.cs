@@ -1,8 +1,8 @@
-using pdp11_emulator.Core.Signaling.Cycles;
-
 namespace pdp11_emulator.Core.Decoding;
+using Signaling.Cycles;
+using Signaling;
 
-public partial class DecoderMux
+public class DecoderMux : DecoderRom
 {
     protected Decoded DOUBLE_OPERAND(ushort opcode)
     {

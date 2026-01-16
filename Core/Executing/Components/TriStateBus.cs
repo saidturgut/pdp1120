@@ -2,23 +2,14 @@ namespace pdp11_emulator.Core.Executing.Components;
 
 public class TriStateBus
 {
-    private byte value;
-    private bool driven;
+    private ushort value;
 
     public void Clear()
-    {
-        value = 0;
-        driven = false;
-    }
+        => value = 0;
     
-    public void Set(byte input)
-    {
-        if (driven)
-            throw new Exception("BUS CONTENTION");
-        
-        driven = true;
-        value = input;
-    }
+    public void Set(ushort input) 
+        => value = input;
 
-    public byte Get() => value;
+    public ushort Get() 
+        => value;
 }

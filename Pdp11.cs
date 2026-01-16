@@ -3,15 +3,15 @@ using Core.Executing.Components;
 
 public class Pdp11
 {
-    private readonly TriStateBus UniBus = new ();
+    private readonly UniBus UniBus = new ();
     
-    // MASTERS
+    // REQUESTERS
     private readonly Cpu Cpu = new ();
     
-    // SLAVES
+    // RESPONDERS
     private readonly Ram Ram = new ();
     
-    private bool HALT = false;
+    private bool HALT;
     
     public void Power() => Clock();
 
@@ -22,11 +22,19 @@ public class Pdp11
         while (!HALT)
         {
             Tick();
+            
+            Thread.Sleep(25);
         }
     }
     
     private void Tick()
     {
+        // REQUESTERS
         Cpu.Tick(UniBus);
+        
+        UniBus.Arbitrate();
+
+        // RESPONDERS
+        Ram.Respond(UniBus);
     }
 }
