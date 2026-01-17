@@ -21,7 +21,12 @@ public partial class DataPath
             B = action.RegisterOperand != RegisterAction.NONE ? 
                 Access(action.RegisterOperand).Get() : action.ConstOperand,
         });
-
+        
         aluBus.Set(output.Result);
+
+        ushort oldFlags = Access(RegisterAction.PSW).Get();
+        
+        Access(RegisterAction.PSW).Set((ushort)
+            ((oldFlags & (ushort)~action.FlagMask) | (output.Flags & (ushort)action.FlagMask)));
     }
 }

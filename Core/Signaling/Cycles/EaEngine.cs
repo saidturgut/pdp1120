@@ -23,14 +23,14 @@ public partial class MicroUnitRom
     {
         CpuBusDriver = decoded.Drivers[registersIndex],
         AluAction = new AluAction(AluOperation.ADD,
-            RegisterAction.NONE, decoded.StepSize),
+            RegisterAction.NONE, decoded.StepSize, AluFlag.None),
         CpuBusLatcher = decoded.Drivers[registersIndex],
     };
     private static SignalSet EA_DEC() => new()
     {
         CpuBusDriver = decoded.Drivers[registersIndex],
         AluAction = new AluAction(AluOperation.SUB,
-            RegisterAction.NONE, decoded.StepSize),
+            RegisterAction.NONE, decoded.StepSize, AluFlag.None),
         CpuBusLatcher = decoded.Drivers[registersIndex],
     };
     
@@ -45,7 +45,7 @@ public partial class MicroUnitRom
         UniBusLatching = UniBusLatching.READ_WORD,
         CpuBusDriver = RegisterAction.MDR,
         AluAction = new AluAction(AluOperation.ADD, 
-            decoded.Drivers[registersIndex], 0),
+            decoded.Drivers[registersIndex], 0, AluFlag.None),
         CpuBusLatcher = RegisterAction.MAR,
         UniBusDriving = UniBusDriving.READ_WORD,
     };

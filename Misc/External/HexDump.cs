@@ -1,4 +1,4 @@
-namespace pdp11_emulator.Misc;
+namespace pdp11_emulator.Misc.External;
 
 public static class HexDump
 {

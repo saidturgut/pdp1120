@@ -1,11 +1,11 @@
 namespace pdp11_emulator;
-using pdp11_emulator.Misc;
+using Misc.External;
 
 public class Rom
 {
     public void Boot(Ram ram)
     {
-        Assembler.RunAssembler();
+        Assembler.Run();
 
         ram.LoadImage(File.ReadAllBytes("test.bin"), false);
     }

@@ -16,7 +16,7 @@ public partial class MicroUnitRom
     {
         CpuBusDriver = RegisterAction.R7,
         AluAction = new AluAction(AluOperation.ADD, 
-            RegisterAction.NONE, 2),
+            RegisterAction.NONE, 2, AluFlag.None),
         CpuBusLatcher = RegisterAction.R7,
     };
 

@@ -1,5 +1,6 @@
 namespace pdp11_emulator.Core.Decoding;
 using Signaling.Cycles;
+using Executing.Computing;
 
 public class DecoderRom
 {
@@ -18,5 +19,11 @@ public class DecoderRom
         /*5*/[MicroCycle.EA_DEC, MicroCycle.EA_REG_MAR, MicroCycle.EA_RAM_MAR, MicroCycle.EA_RAM_MDR],
         /*6*/[MicroCycle.EA_INDEX_MAR, MicroCycle.PC_INC, MicroCycle.EA_INDEX_MDR, MicroCycle.EA_RAM_MDR],
         /*7*/[MicroCycle.EA_INDEX_MAR, MicroCycle.PC_INC, MicroCycle.EA_INDEX_MDR, MicroCycle.EA_RAM_MAR, MicroCycle.EA_RAM_MDR],
+    ];
+
+    public AluFlag[] FlagMasks =
+    [
+        AluFlag.Trace | AluFlag.Negative | AluFlag.Zero | AluFlag.Overflow | AluFlag.Carry,
+        AluFlag.Trace | AluFlag.Negative | AluFlag.Zero | AluFlag.Overflow,
     ];
 }

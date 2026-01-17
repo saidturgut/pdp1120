@@ -5,7 +5,7 @@ using Multiplexer;
 
 public class Decoder : DecoderMux
 {
-    public MicroCycle[] FixedOpcodes =
+    private readonly MicroCycle[] FixedOpcodes =
     [
         MicroCycle.HALT, // 0x1
     ];

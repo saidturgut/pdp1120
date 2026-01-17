@@ -6,14 +6,13 @@ public partial class MicroUnitRom
 {
     private static SignalSet HALT() => new()
     {
-
     };
     
     private static SignalSet ALU_EXECUTE() => new()
     {
         CpuBusDriver = RegisterAction.TMP,
         AluAction = new AluAction(decoded.AluOperation, 
-            RegisterAction.DST, 0),
+            RegisterAction.DST, 0, decoded.FlagMask),
         CpuBusLatcher = RegisterAction.TMP,
     };
 }

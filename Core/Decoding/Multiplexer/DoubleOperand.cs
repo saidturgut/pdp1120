@@ -7,25 +7,25 @@ public partial class DecoderMux
 {
     protected Decoded DOUBLE_OPERAND(ushort opcode)
     {
-        byte operation = (byte)((opcode & 0xF000) >> 12);
-        bool byteMode =  ((opcode >> 11) & 0x1) == 1;
+        byte operation = (byte)((opcode >> 12) & 0xF);
+        bool byteMode =  ((opcode >> 11) & 1) != 0;
+        
+        DoubleOperandType type = (DoubleOperandType)operation;
         
         Decoded decoded = new()
         {
-            Drivers = [(RegisterAction)((opcode >> 6)  & 0x7), (RegisterAction)(opcode & 0x7)],
-            AluOperation = DoubleOperandTable[operation],
+            Drivers = [(RegisterAction)((opcode >> 6)  & 0x7), 
+                (RegisterAction)(opcode & 0x7)],
+            AluOperation = DoubleOperandTable[(ushort)type],
+            FlagMask = FlagMasks[type == DoubleOperandType.MOV ? 1 : 0], 
             StepSize = 2,
         };
         
-        Console.WriteLine(opcode);
+        Console.WriteLine(DoubleOperandTable[(ushort)type]);
         
         Console.WriteLine(decoded.Drivers[0]);
         Console.WriteLine(decoded.Drivers[1]);
-
-        Environment.Exit(5);
         
-        DoubleOperandType type = (DoubleOperandType)operation;
-
         // EFFECTIVE ADDRESS ENGINE
         if (type is not (DoubleOperandType.ADD or DoubleOperandType.SUB))
             decoded.StepSize = (byte)(byteMode ? 1 : 2);
@@ -36,11 +36,13 @@ public partial class DecoderMux
         // EXECUTE ENGINE
         if (type is not DoubleOperandType.MOV)
             decoded.MicroCycles.Add(MicroCycle.ALU_EXECUTE);
+        else
+            
         
         // WRITE BACK ENGINE
         if (type is not (DoubleOperandType.CMP or DoubleOperandType.BIT))
         {
-            decoded.MicroCycles.Add(((opcode >> 3) & 0x7) == 0 ? 
+            decoded.MicroCycles.Add(((opcode >> 3) & 0x38) == 0 ? 
                 MicroCycle.WRITE_BACK_REG : MicroCycle.WRITE_BACK_RAM);
         }
         
@@ -49,16 +51,19 @@ public partial class DecoderMux
 
     private enum DoubleOperandType
     {
-        MOV = 0b01, CMP = 0b10, BIT = 0b11, BIC = 0b100, BIS = 0b101, 
-        ADD = 0b110, SUB = 0b1110
+        MOV = 0x1, CMP = 0x2, BIT = 0x3, BIC = 0x4, BIS = 0x5, 
+        ADD = 0x6, SUB = 0xE
     }
 
     public AluOperation[] DoubleOperandTable =
     [
         AluOperation.NONE,
-        AluOperation.ADD,
-        AluOperation.SUB, AluOperation.SUB,
-        AluOperation.AND, AluOperation.AND,
-        AluOperation.OR,
+        AluOperation.NONE, AluOperation.SUB, 
+        AluOperation.AND, AluOperation.AND, 
+        AluOperation.OR, AluOperation.ADD,
+        AluOperation.NONE, AluOperation.NONE, 
+        AluOperation.NONE, AluOperation.NONE, 
+        AluOperation.NONE, AluOperation.NONE, 
+        AluOperation.NONE, AluOperation.SUB,
     ];
 }

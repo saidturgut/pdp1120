@@ -14,11 +14,12 @@ public struct SignalSet()
 }
 
 public struct AluAction(AluOperation operation, 
-    RegisterAction registerOperand , ushort constOperand)
+    RegisterAction registerOperand , ushort constOperand, AluFlag flagMask)
 {
-    public AluOperation AluOperation = operation;
-    public RegisterAction RegisterOperand = registerOperand;
-    public ushort ConstOperand = constOperand;
+    public readonly AluOperation AluOperation = operation;
+    public readonly RegisterAction RegisterOperand = registerOperand;
+    public readonly ushort ConstOperand = constOperand;
+    public readonly AluFlag FlagMask = flagMask;
 }
 
 public enum UniBusDriving
@@ -36,5 +37,5 @@ public enum RegisterAction
 {
     R0 = 0, R1 = 1, R2 = 2, R3 = 3, R4 = 4, R5 = 5, R6 = 6, R7 = 7,
     MDR = 8, IR = 9, MAR = 10, TMP = 11, DST = 12,
-    NONE = 13,
+    PSW = 13, NONE = 14,
 }

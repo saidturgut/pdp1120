@@ -5,6 +5,8 @@ using Components;
 
 public partial class DataPath
 {
+    private const Requester requesterType = Requester.CPU;
+    
     public void UniBusLatch(UniBus uniBus)
     {
         if(signals.UniBusLatching is UniBusLatching.NONE)

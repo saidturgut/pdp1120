@@ -15,6 +15,8 @@ public class MicroUnit : MicroUnitRom
 
     public SignalSet Emit(ushort ir)
     {
+        Console.WriteLine($"CURRENT CYCLE : {decoded.MicroCycles[currentCycle]}");
+        
         if (INTERRUPT)
             return new SignalSet();
 
@@ -29,8 +31,6 @@ public class MicroUnit : MicroUnitRom
     
     public void Advance()
     {
-        Console.WriteLine($"CURRENT CYCLE : {decoded.MicroCycles[currentCycle]}");
-        
         if (decoded.MicroCycles[currentCycle] is MicroCycle.HALT)
         {
             HALT = true;

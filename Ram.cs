@@ -1,7 +1,7 @@
 namespace pdp11_emulator;
 using Core.Executing.Components;
 using Core.Signaling;
-using Misc;
+using Misc.External;
 
 public class Ram
 {
@@ -11,7 +11,7 @@ public class Ram
     {
         for (int i = 0; i < image.Length; i++)
             Memory[i] = image[i];
-
+        
         if (hexDump)
             HexDump.Write(Memory);
     }
@@ -56,7 +56,7 @@ public class Ram
         Memory[address] = (byte)(value & 0xFF);
         Memory[address + 1] = (byte)(value >> 6);
 
-        Console.WriteLine($"MEMORY : {value}");
+        Console.WriteLine($"MEMORY [{O(address)}] : {O(value)}");
     }
 
     private byte ReadByte(ushort address) 
@@ -65,5 +65,10 @@ public class Ram
     private void WriteByte(ushort address, byte value)
     {
         Memory[address] = value;
+        
+        Console.WriteLine($"MEMORY [{O(address)}] : {O(value)}");
     }
+
+    private string O(int input)
+        => $"{Convert.ToString(input, 8)}";
 }

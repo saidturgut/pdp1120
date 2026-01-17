@@ -8,6 +8,7 @@ public struct Decoded()
     public RegisterAction[] Drivers = new RegisterAction[2];
 
     public AluOperation AluOperation = AluOperation.NONE;
+    public AluFlag FlagMask = AluFlag.None;
     public byte StepSize = 2;
 
     public readonly List<MicroCycle> MicroCycles 
