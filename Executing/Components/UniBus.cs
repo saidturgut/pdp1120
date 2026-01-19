@@ -35,6 +35,7 @@ public class UniBus
                 
                 requesters[i] = null;
                 respondPermit = true;
+                
                 return;
             }
         }

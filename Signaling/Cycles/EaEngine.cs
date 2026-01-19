@@ -4,18 +4,18 @@ using Executing.Computing;
 // EFFECTIVE ADDRESS CYCLES
 public partial class ControlUnitRom
 {
-    private static readonly RegisterAction[] EaLatchers 
-        = [RegisterAction.TMP, RegisterAction.DST];
+    private static readonly Register[] EaLatchers 
+        = [Register.TMP, Register.DST];
     
-    private static SignalSet EA_REG() => new()
+    private static SignalSet EA_REG_DATA_LATCH() => new()
     {
         CpuBusDriver = decoded.Drivers[registersIndex],
         CpuBusLatcher = EaLatchers[registersIndex],
     };// EXIT
-    private static SignalSet EA_REG_MAR() => new()
+    private static SignalSet EA_REG_ADDR_LATCH() => new()
     {
         CpuBusDriver = decoded.Drivers[registersIndex],
-        CpuBusLatcher = RegisterAction.MAR,
+        CpuBusLatcher = Register.MAR,
         UniBusDriving = UniBusDriving.READ_WORD,
     };
 
@@ -23,48 +23,47 @@ public partial class ControlUnitRom
     {
         CpuBusDriver = decoded.Drivers[registersIndex],
         AluAction = new AluAction(AluOperation.ADD,
-            RegisterAction.NONE, decoded.StepSize, AluFlag.None),
+            Register.NONE, AluFlag.None),
         CpuBusLatcher = decoded.Drivers[registersIndex],
-        ByteMode = decoded.StepSize == 1,
     };
     private static SignalSet EA_DEC() => new()
     {
         CpuBusDriver = decoded.Drivers[registersIndex],
         AluAction = new AluAction(AluOperation.SUB,
-            RegisterAction.NONE, decoded.StepSize, AluFlag.None),
+            Register.NONE, AluFlag.None),
         CpuBusLatcher = decoded.Drivers[registersIndex],
-        ByteMode = decoded.StepSize == 1,
     };
     
     private static SignalSet EA_INDEX_MAR() => new()
     {
-        CpuBusDriver = RegisterAction.R7,
-        CpuBusLatcher = RegisterAction.MAR,
+        CpuBusDriver = Register.R7,
+        CpuBusLatcher = Register.MAR,
         UniBusDriving = UniBusDriving.READ_WORD,
     };
     private static SignalSet EA_INDEX_MDR() => new()
     {
-        UniBusLatching = UniBusLatching.READ_WORD,
-        CpuBusDriver = RegisterAction.MDR,
+        UniBusLatching = true,
+        CpuBusDriver = Register.MDR,
         AluAction = new AluAction(AluOperation.ADD, 
-            decoded.Drivers[registersIndex], 0, AluFlag.None),
-        CpuBusLatcher = RegisterAction.MAR,
+            decoded.Drivers[registersIndex], AluFlag.None),
+        CpuBusLatcher = Register.MAR,
         UniBusDriving = UniBusDriving.READ_WORD,
     };
     
-    private static SignalSet EA_RAM_MAR() => new()
+    private static SignalSet EA_UNI_ADDR_LATCH() => new()
     {
-        UniBusLatching = UniBusLatching.READ_WORD,
-        CpuBusDriver = RegisterAction.MDR,
-        CpuBusLatcher = RegisterAction.MAR,
+        UniBusLatching = true,
+        CpuBusDriver = Register.MDR,
+        CpuBusLatcher = Register.MAR,
         UniBusDriving = UniBusDriving.READ_WORD,
     };
-    private static SignalSet EA_RAM_MDR() => new()
+    
+    private static SignalSet EA_UNI_DATA_LATCH() => new()
     {
-        UniBusLatching = decoded.StepSize == 1 
-            ? UniBusLatching.READ_BYTE : UniBusLatching.READ_WORD,
-        CpuBusDriver = RegisterAction.MDR,
+        UniBusLatching = true,
+        CpuBusDriver = Register.MDR,
         CpuBusLatcher = EaLatchers[registersIndex],
-        ByteMode = decoded.StepSize == 1,
     };// EXIT
+
+    private static SignalSet EA_TOGGLE() => new();
 }

@@ -17,6 +17,20 @@ public enum AluOperation
     ASR, ASL, ROR, ROL, SWAB, // BITWISE OPERATIONS
 };
 
+public struct AluInput
+{
+    public AluOperation Operation;
+    public ushort A;
+    public ushort B;
+    public bool C;
+}
+
+public struct AluOutput
+{
+    public ushort Result;
+    public ushort Flags;
+}
+
 [Flags]
 public enum AluFlag
 {

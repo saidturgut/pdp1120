@@ -1,4 +1,5 @@
 namespace pdp11_emulator.Utility;
+using System.Text.RegularExpressions;
 using System.Diagnostics;
 
 public static class Assembler
@@ -24,5 +25,6 @@ public static class Assembler
 
         if (proc.ExitCode != 0)
             throw new Exception($"Build failed:\n{stderr}");
-    }
+
+    } 
 }

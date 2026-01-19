@@ -11,14 +11,26 @@ public class DecoderRom
 
     protected readonly MicroCycle[][] EaEngine =
     [
-        /*0*/[MicroCycle.EA_REG],
-        /*1*/[MicroCycle.EA_REG_MAR, MicroCycle.EA_RAM_MAR, MicroCycle.EA_RAM_MDR],
-        /*2*/[MicroCycle.EA_REG_MAR, MicroCycle.EA_INC, MicroCycle.EA_RAM_MDR],
-        /*3*/[MicroCycle.EA_REG_MAR, MicroCycle.EA_INC, MicroCycle.EA_RAM_MAR, MicroCycle.EA_RAM_MDR],
-        /*4*/[MicroCycle.EA_DEC, MicroCycle.EA_REG_MAR, MicroCycle.EA_RAM_MDR],
-        /*5*/[MicroCycle.EA_DEC, MicroCycle.EA_REG_MAR, MicroCycle.EA_RAM_MAR, MicroCycle.EA_RAM_MDR],
-        /*6*/[MicroCycle.EA_INDEX_MAR, MicroCycle.PC_INC, MicroCycle.EA_INDEX_MDR, MicroCycle.EA_RAM_MDR],
-        /*7*/[MicroCycle.EA_INDEX_MAR, MicroCycle.PC_INC, MicroCycle.EA_INDEX_MDR, MicroCycle.EA_RAM_MAR, MicroCycle.EA_RAM_MDR],
+        // 0 |  R
+        [MicroCycle.EA_REG_DATA_LATCH],
+        
+        // 1 |  @R or (R)
+        [MicroCycle.EA_REG_ADDR_LATCH, MicroCycle.EA_UNI_DATA_LATCH],
+        
+        // 2 |  (R)+ 
+        [MicroCycle.EA_REG_ADDR_LATCH, MicroCycle.EA_UNI_DATA_LATCH, MicroCycle.EA_INC],
+        // 3 |  @(R)+ 
+        [MicroCycle.EA_REG_ADDR_LATCH, MicroCycle.EA_UNI_ADDR_LATCH, MicroCycle.EA_UNI_DATA_LATCH, MicroCycle.EA_INC],
+        
+        // 4 |  -(R)
+        [MicroCycle.EA_DEC, MicroCycle.EA_REG_ADDR_LATCH, MicroCycle.EA_UNI_DATA_LATCH],
+        // 5 |  @-(R)
+        [MicroCycle.EA_DEC, MicroCycle.EA_REG_ADDR_LATCH, MicroCycle.EA_UNI_ADDR_LATCH, MicroCycle.EA_UNI_DATA_LATCH],
+        
+        // 6 |  X(R)
+        [MicroCycle.EA_INDEX_MAR, MicroCycle.EA_INDEX_MDR, MicroCycle.EA_UNI_DATA_LATCH, MicroCycle.PC_INC],
+        // 7 |  @X(R) 
+        [MicroCycle.EA_INDEX_MAR, MicroCycle.EA_INDEX_MDR, MicroCycle.EA_UNI_ADDR_LATCH, MicroCycle.EA_UNI_DATA_LATCH, MicroCycle.PC_INC],
     ];
 
     protected readonly Dictionary<FlagMask, AluFlag> FlagMasks = new()

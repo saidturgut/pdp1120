@@ -9,23 +9,24 @@ public class Decoder : DecoderMux
     [
         MicroCycle.HALT, // 0x1
     ];
-    
-    public Decoded Decode(ushort IR)
-    {
-        if (IR < FixedOpcodes.Length)
-            return FIXED_OPCODE(FixedOpcodes[IR]);
-        
-        if ((IR & 0xFFF8) == 0x0080)
-            return RTS(IR);
-        if ((IR & 0xFFF8) == 0x0800)
-            return JSR(IR);
-        if ((IR & 0xF800) == 0x0800 || (IR & 0xF800) == 0x8800)
-            return SINGLE_OPERAND(IR);
-        if ((IR & 0xF000) == 0x1000)
-            return BRANCH(IR);
-        if ((IR & 0x7000) >= 0x1000 && (IR & 0x7000) <= 0x6000)
-            return DOUBLE_OPERAND(IR);
 
-        throw new Exception("ILLEGAL OPCODE!!");    
+    public Decoded Decode(ushort ir)
+    {
+        SetNibbles(ir);
+        
+        if (ir == 0)
+            return ZERO_OPERAND(FixedOpcodes[ir]);
+        
+        byte fzzz = (byte)(ir >> 12);
+        byte zfzz = (byte)((ir & 0x0F00) >> 8);
+        
+        if (fzzz is (>= 1 and <= 6) or (>= 9 and <= 0xE))
+            return TWO_OPERAND(ir);
+        
+        if (fzzz is 0 or 8 && 
+            zfzz is >= 0xA and <= 0xC)
+            return ONE_OPERAND(ir);
+        
+        throw new Exception($"ILLEGAL OPCODE ON ROW {fzzz}, COLUMN  {zfzz}");
     }
 }

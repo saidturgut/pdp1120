@@ -1,6 +1,6 @@
 namespace pdp11_emulator.Executing.Components;
 
-public class Register()
+public class RegisterObject()
 {
     private ushort value;
     

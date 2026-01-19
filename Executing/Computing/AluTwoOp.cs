@@ -10,15 +10,12 @@ public partial class AluRom
     {
         AluOutput output = new();
         var sum = (uint)(input.A + input.B);
-        output.Result = (ushort)(sum & (input.ByteMode ? 0xFFu : 0xFFFFu));
+        output.Result = (ushort)(sum & 0xFFFF);
         
-        var carryCondition = input.ByteMode ? 0x100u : 0x10000u;
-        var overflowCondition = input.ByteMode ? 0x80u : 0x8000u;
-        
-        if ((sum & carryCondition) != 0)
+        if ((sum & 0x10000) != 0)
             output.Flags |= (ushort)AluFlag.Carry;
 
-        if ((~(input.A ^ input.B) & (input.A ^ output.Result) & overflowCondition) != 0)
+        if ((~(input.A ^ input.B) & (input.A ^ output.Result) & 0x8000) != 0)
             output.Flags |= (ushort)AluFlag.Overflow;
         
         return output;
@@ -26,17 +23,13 @@ public partial class AluRom
     private static AluOutput SUB(AluInput input)
     {
         AluOutput output = new();
-
         var sum = (uint)(input.A - input.B);
-        output.Result = (ushort)(sum & (input.ByteMode ? 0xFFu : 0xFFFFu));
-
-        var carryBit = input.ByteMode ? 0x100u : 0x10000u;
-        var overflowCondition = input.ByteMode ? 0x80u : 0x8000u;
-
-        if ((sum & carryBit) == 0)
+        output.Result = (ushort)(sum & 0xFFFF);
+        
+        if ((sum & 0x10000) == 0)
             output.Flags |= (ushort)AluFlag.Carry;
 
-        if (((input.A ^ input.B) & (input.A ^ output.Result) & overflowCondition) != 0)
+        if (((input.A ^ input.B) & (input.A ^ output.Result) & 0x8000) != 0)
             output.Flags |= (ushort)AluFlag.Overflow;
 
         return output;

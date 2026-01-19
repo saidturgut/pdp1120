@@ -1,2 +1,2 @@
-.org    01000        
-inc r0
+.org 0
+BIS R1, R0

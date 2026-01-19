@@ -8,24 +8,24 @@ public partial class ControlUnitRom
 
     private static SignalSet FETCH_MAR() => new()
     {
-        CpuBusDriver = RegisterAction.R7,
-        CpuBusLatcher = RegisterAction.MAR,
+        CpuBusDriver = Register.R7,
+        CpuBusLatcher = Register.MAR,
         UniBusDriving = UniBusDriving.READ_WORD,
     };
 
     private static SignalSet PC_INC() => new()
     {
-        CpuBusDriver = RegisterAction.R7,
+        CpuBusDriver = Register.R7,
         AluAction = new AluAction(AluOperation.ADD, 
-            RegisterAction.NONE, 2, AluFlag.None),
-        CpuBusLatcher = RegisterAction.R7,
+            Register.NONE, AluFlag.None),
+        CpuBusLatcher = Register.R7,
     };
 
     private static SignalSet FETCH_MDR() => new()
     {
-        UniBusLatching = UniBusLatching.READ_WORD,
-        CpuBusDriver = RegisterAction.MDR,
-        CpuBusLatcher = RegisterAction.IR,
+        UniBusLatching = true,
+        CpuBusDriver = Register.MDR,
+        CpuBusLatcher = Register.IR,
     };
 
     private static SignalSet DECODE() => new();

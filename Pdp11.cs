@@ -41,7 +41,11 @@ public class Pdp11
 
         // RESPONDERS
         Ram.Respond(UniBus);
-
+        
         HALT = Kd11.HALT;
+        
+        return;
+        Console.WriteLine($"UNIBUS ADDRESS {UniBus.GetAddress()}");
+        Console.WriteLine($"UNIBUS DATA {UniBus.GetData()}");
     }
 }

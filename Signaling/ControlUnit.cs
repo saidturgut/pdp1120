@@ -40,7 +40,7 @@ public class ControlUnit : ControlUnitRom
         if (INTERRUPT)
             return;
         
-        if (ToggleCycles.Contains(decoded.MicroCycles[currentCycle]))
+        if (decoded.MicroCycles[currentCycle] == MicroCycle.EA_TOGGLE)
             registersIndex = (byte)(registersIndex == 0 ? 1 : 0);
 
         if (currentCycle == decoded.MicroCycles.Count - 1)

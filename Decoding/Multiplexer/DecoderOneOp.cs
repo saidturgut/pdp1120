@@ -5,17 +5,12 @@ using Signaling;
 
 public partial class DecoderMux
 {
-    protected Decoded SINGLE_OPERAND(ushort opcode)
+    protected Decoded ONE_OPERAND(ushort opcode)
     {
-        byte bbb = (byte)((opcode >> 13) & 0b111);
-
-        Console.WriteLine(opcode);
-        
         Decoded decoded = new()
         {
-            Drivers = [(RegisterAction)(opcode & 0x7)],
+            Drivers = [(Register)(opcode & 0x7)],
             AluOperation = SingleOperandTable[(opcode >> 6) & 0x7],
-            StepSize = (byte)((bbb is 0b100 or 0b101) && (opcode & 0x8000) != 0 ? 1 : 2),
         };
         
         // FLAG MASK

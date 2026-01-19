@@ -10,16 +10,16 @@ public partial class ControlUnitRom
     
     private static SignalSet EXE_WRITE_BACK() => new()
     {
-        CpuBusDriver = RegisterAction.TMP,
+        CpuBusDriver = Register.TMP,
         AluAction = new AluAction(decoded.AluOperation, 
-            RegisterAction.DST, 0, decoded.FlagMask),
-        CpuBusLatcher = RegisterAction.TMP,
+            Register.DST, decoded.FlagMask),
+        CpuBusLatcher = Register.TMP,
     };
 
     private static SignalSet EXE_FLAGS() => new()
     {
-        CpuBusDriver = RegisterAction.TMP,
+        CpuBusDriver = Register.TMP,
         AluAction = new AluAction(decoded.AluOperation,
-            RegisterAction.DST, 0, decoded.FlagMask),
+            Register.DST, decoded.FlagMask),
     };
 }

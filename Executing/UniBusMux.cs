@@ -11,9 +11,9 @@ public partial class DataPath
     
     public void UniBusLatch(UniBus uniBus)
     {
-        if(signals.UniBusLatching is UniBusLatching.NONE)
+        if(!signals.UniBusLatching)
             return;
-
+        
         if (uniBus.requesters[(ushort)requesterType] != null)
         {
             STALL = true;
@@ -21,7 +21,7 @@ public partial class DataPath
         }
 
         STALL = false;
-        Access(RegisterAction.MDR).Set(uniBus.GetData());
+        Access(Register.MDR).Set(uniBus.GetData());
     }
     
     public void UniBusDrive(UniBus uniBus)
@@ -30,27 +30,12 @@ public partial class DataPath
             return;
 
         UniBusDriving masked = signals.UniBusDriving;
-
-        if (signals.ByteMode)
-        {
-            switch (signals.UniBusDriving)
-            {
-                case UniBusDriving.READ_WORD:
-                    masked  = UniBusDriving.READ_BYTE;
-                    break;
-                case  UniBusDriving.WRITE_WORD:
-                    masked = UniBusDriving.WRITE_BYTE;
-                    break;
-            }
-        }
-        
-        Console.WriteLine(masked);
         
         uniBus.Request(new Request
         {
             Requester = (byte)requesterType,
-            Address = Access(RegisterAction.MAR).Get(),
-            Data = Access(RegisterAction.TMP).Get(),
+            Address = Access(Register.MAR).Get(),
+            Data = Access(Register.TMP).Get(),
             Operation = masked,
         });
     }

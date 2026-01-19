@@ -14,23 +14,21 @@ public partial class DataPath
         
         AluAction action = signals.AluAction.Value;
         
-        ushort A = action.RegisterOperand != RegisterAction.NONE
-            ? Access(action.RegisterOperand).Get() : action.ConstOperand;
-        
         AluOutput output = Alu.Compute(new AluInput
         {
             Operation = action.AluOperation,
-            A = !signals.ByteMode ? A : (byte)(A & 0xFF),
-            B = !signals.ByteMode ? cpuBus.Get() : (byte)(cpuBus.Get() & 0xFF),
-            C = (Access(RegisterAction.PSW).Get() & (ushort)AluFlag.Carry) != 0,
-            ByteMode = signals.ByteMode,
+            
+            A = cpuBus.Get(),
+            
+            B = action.RegisterOperand != Register.NONE
+                ? Access(action.RegisterOperand).Get() : (ushort)2,
+            
+            C = (Access(Register.PSW).Get() & (ushort)AluFlag.Carry) != 0,
         });
 
         aluBus.Set(output.Result);
 
-        ushort oldFlags = Access(RegisterAction.PSW).Get();
-        
-        Access(RegisterAction.PSW).Set((ushort)
-            ((oldFlags & (ushort)~action.FlagMask) | (output.Flags & (ushort)action.FlagMask)));
+        Access(Register.PSW).Set((ushort)
+            ((Access(Register.PSW).Get() & (ushort)~action.FlagMask) | (output.Flags & (ushort)action.FlagMask)));
     }
 }
