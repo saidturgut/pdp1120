@@ -10,7 +10,7 @@ public partial class DecoderMux
         // ASSIGN ESSENTIALS
         Decoded decoded = new()
         {
-            EncodedRegisters = [(Register)(ir & 0x7)],
+            Registers = [(Register)(ir & 0x7)],
             
             Operation = ((ir >> 6) & 0x3F)  switch
             {
@@ -37,12 +37,12 @@ public partial class DecoderMux
         
         // EA AND EXE ENGINES
         decoded.MicroCycles.AddRange(AddressEngine[(ir >> 3) & 0x7]);
-        decoded.MicroCycles.Add(MicroCycle.EXECUTE_LATCH);
+        decoded.MicroCycles.Add(MicroCycle.EXECUTE_EA);
 
         // COMMIT ENGINE
         if (decoded.Operation is not Operation.PASS)
             decoded.MicroCycles.Add(
-                ((ir >> 3) & 0x7) == 0 ? MicroCycle.COMMIT_FIRST : MicroCycle.COMMIT_RAM);
+                ((ir >> 3) & 0x7) == 0 ? MicroCycle.TMP_TO_REG : MicroCycle.TMP_TO_RAM);
         
         return decoded;
     }

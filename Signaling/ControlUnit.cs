@@ -15,7 +15,7 @@ public class ControlUnit : ControlUnitRom
 
     public SignalSet Emit(ushort ir)
     {
-        Console.WriteLine($"CURRENT CYCLE : {decoded.MicroCycles[currentCycle]}");
+        Console.WriteLine("CURRENT CYCLE : " +  decoded.MicroCycles[currentCycle]);
         
         if (INTERRUPT)
             return new SignalSet();
@@ -40,9 +40,9 @@ public class ControlUnit : ControlUnitRom
         if (INTERRUPT)
             return;
         
-        if (decoded.MicroCycles[currentCycle] == MicroCycle.EA_TOGGLE)
+        if (decoded.MicroCycles[currentCycle] == MicroCycle.INDEX_TOGGLE)
             registersIndex = (byte)(registersIndex == 0 ? 1 : 0);
-
+        
         if (currentCycle == decoded.MicroCycles.Count - 1)
         {
             registersIndex = 0;

@@ -1,4 +1,13 @@
         .text
-        .org    00000
-start:
-        JSR R5, @#addr
+        .org    000000
+
+START:
+    jsr r5, A
+    halt
+
+A:
+    jsr r5, B
+    rts r5
+
+B:
+    rts r5

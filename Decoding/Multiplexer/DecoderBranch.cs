@@ -15,7 +15,7 @@ public partial class DecoderMux
             Condition = (Condition)((ir >> 8) > 7 ? (ir >> 8) - 120 : ir >> 8),
         };
         
-        decoded.MicroCycles.Add(MicroCycle.COMMIT_BRANCH);
+        decoded.MicroCycles.Add(MicroCycle.BRANCH_COMMIT);
         return decoded;
     }
 
@@ -23,7 +23,7 @@ public partial class DecoderMux
     {
         Decoded decoded = new()
         {
-            EncodedRegisters = [(Register)((ir >> 6) & 0x7)],
+            Registers = [(Register)((ir >> 6) & 0x7)],
 
             Operation = Operation.SUB,
             CycleLatch = (ushort)((ir & 0x3F) << 1),
@@ -31,8 +31,8 @@ public partial class DecoderMux
             Condition = Condition.SOB, // != 0
         };
         
-        decoded.MicroCycles.Add(MicroCycle.COMMIT_DEC);
-        decoded.MicroCycles.Add(MicroCycle.COMMIT_BRANCH);
+        decoded.MicroCycles.Add(MicroCycle.BRANCH_DEC);
+        decoded.MicroCycles.Add(MicroCycle.BRANCH_COMMIT);
         return decoded;
     }
 }

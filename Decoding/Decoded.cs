@@ -5,7 +5,7 @@ using Signaling;
 
 public struct Decoded()
 {
-    public Register[] EncodedRegisters = new Register[2];
+    public Register[] Registers = new Register[2];
 
     public Condition Condition = Condition.NONE;
     public Operation Operation = Operation.NONE;

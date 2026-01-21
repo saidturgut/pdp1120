@@ -8,7 +8,7 @@ public partial class ControlUnitRom
 
     private static byte GetStepSize()
         => (byte)(decoded.CycleMode != CycleMode.BYTE_MODE || 
-                  (decoded.EncodedRegisters[registersIndex] is Register.PC or Register.SP) ? 2 : 1);
+                  (decoded.Registers[registersIndex] is Register.PC or Register.SP) ? 2 : 1);
 
     private static UniBusDriving GetReadMode()
         => decoded.CycleMode != CycleMode.BYTE_MODE
@@ -17,40 +17,58 @@ public partial class ControlUnitRom
     private static UniBusDriving GetWriteMode()
         => decoded.CycleMode != CycleMode.BYTE_MODE
             ? UniBusDriving.WRITE_WORD : UniBusDriving.WRITE_BYTE;
-    
+
     protected static readonly Func<SignalSet>[] MicroCycles =
     [
         EMPTY,
+        //FETCH ENGINE
         FETCH_READ, PC_INC, FETCH_LATCH,
         DECODE, HALT,
     
-        EA_REG_LATCH, 
-        EA_READ_MODDED, EA_READ_WORD,
-        EA_INC, EA_DEC,
-        EA_INDEX_ADDR, EA_INDEX_MODDED, EA_INDEX_WORD,
-        EA_DEFERRED, EA_UNI_LATCH,
-        EA_TOGGLE,
+        // ADDRESS ENGINE
+        REG_TO_TEMP, 
+        REG_TO_MAR_MOD, REG_TO_MAR_WORD,
+        PC_TO_MAR, 
+        REG_INC, REG_DEC,
+        MDR_TO_TEMP, MDR_TO_MAR, 
+        MDR_INDEX_MAR_MOD, MDR_INDEX_MAR_WORD,
+        INDEX_TOGGLE,
+    
+        // CONTROL ENGINE
+        REG_ALU, REG_TO_MAR,
+        PC_TO_REG, REG_TO_PC, DST_TO_PC,
+        MDR_TO_REG,
         
-        EXECUTE_LATCH, EXECUTE_FLAGS, EXECUTE_PSW,
-        COMMIT_DEC, COMMIT_BRANCH,
-        COMMIT_FIRST, COMMIT_SECOND, COMMIT_RAM,
+        // EXECUTE AND COMMIT ENGINE
+        EXECUTE_EA, EXECUTE_FLAGS, EXECUTE_PSW,
+        BRANCH_DEC, BRANCH_COMMIT,
+        TMP_TO_REG, TMP_TO_RAM,
     ];
 }
 
 public enum MicroCycle
 { 
     EMPTY,
+    //FETCH ENGINE
     FETCH_READ, PC_INC, FETCH_LATCH,
     DECODE, HALT,
     
-    EA_REG_LATCH, 
-    EA_READ_MODDED, EA_READ_WORD,
-    EA_INC, EA_DEC,
-    EA_INDEX_ADDR, EA_INDEX_MODDED, EA_INDEX_WORD,
-    EA_DEFERRED, EA_UNI_LATCH,
-    EA_TOGGLE,
+    // ADDRESS ENGINE
+    REG_TO_TEMP, 
+    REG_TO_MAR_MOD, REG_TO_MAR_WORD,
+    PC_TO_MAR, 
+    REG_INC, REG_DEC,
+    MDR_TO_TEMP, MDR_TO_MAR, 
+    MDR_INDEX_MAR_MOD, MDR_INDEX_MAR_WORD,
+    INDEX_TOGGLE,
+    
+    // CONTROL ENGINE
+    REG_ALU, REG_TO_MAR,
+    PC_TO_REG, REG_TO_PC, DST_TO_PC,
+    MDR_TO_REG,
         
-    EXECUTE_LATCH, EXECUTE_FLAGS, EXECUTE_PSW,
-    COMMIT_DEC, COMMIT_BRANCH,
-    COMMIT_FIRST, COMMIT_SECOND, COMMIT_RAM,
+    // EXECUTE AND COMMIT ENGINE
+    EXECUTE_EA, EXECUTE_FLAGS, EXECUTE_PSW,
+    BRANCH_DEC, BRANCH_COMMIT,
+    TMP_TO_REG, TMP_TO_RAM,
 }

@@ -49,7 +49,7 @@ public class Ram
     
     public void Respond(UniBus uniBus)
     {
-        if(uniBus.GetAddress() >= 0x8000 || !uniBus.respondPermit)
+        if(!uniBus.respondPermit)
             return;
         
         switch (uniBus.operation)

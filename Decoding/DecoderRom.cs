@@ -12,25 +12,25 @@ public class DecoderRom
     protected readonly MicroCycle[][] AddressEngine =
     [
         // 0 |  R
-        [MicroCycle.EA_REG_LATCH],
+        [MicroCycle.REG_TO_TEMP],
         
         // 1 |  @R or (R)
-        [MicroCycle.EA_READ_MODDED ,MicroCycle.EA_UNI_LATCH],
+        [MicroCycle.REG_TO_MAR_MOD ,MicroCycle.MDR_TO_TEMP],
         
         // 2 |  (R)+ 
-        [MicroCycle.EA_READ_MODDED, MicroCycle.EA_UNI_LATCH, MicroCycle.EA_INC],
+        [MicroCycle.REG_TO_MAR_MOD, MicroCycle.MDR_TO_TEMP, MicroCycle.REG_INC],
         // 3 |  @(R)+ 
-        [MicroCycle.EA_READ_WORD, MicroCycle.EA_DEFERRED, MicroCycle.EA_UNI_LATCH, MicroCycle.EA_INC],
+        [MicroCycle.REG_TO_MAR_WORD, MicroCycle.MDR_TO_MAR, MicroCycle.MDR_TO_TEMP, MicroCycle.REG_INC],
         
         // 4 |  -(R)
-        [MicroCycle.EA_DEC, MicroCycle.EA_READ_MODDED, MicroCycle.EA_UNI_LATCH],
+        [MicroCycle.REG_DEC, MicroCycle.REG_TO_MAR_MOD, MicroCycle.MDR_TO_TEMP],
         // 5 |  @-(R)
-        [MicroCycle.EA_DEC, MicroCycle.EA_READ_WORD, MicroCycle.EA_DEFERRED, MicroCycle.EA_UNI_LATCH],
+        [MicroCycle.REG_DEC, MicroCycle.REG_TO_MAR_WORD, MicroCycle.MDR_TO_MAR, MicroCycle.MDR_TO_TEMP],
         
         // 6 |  X(R)
-        [MicroCycle.EA_INDEX_ADDR, MicroCycle.EA_INDEX_MODDED, MicroCycle.EA_UNI_LATCH, MicroCycle.PC_INC],
+        [MicroCycle.PC_TO_MAR, MicroCycle.MDR_INDEX_MAR_MOD, MicroCycle.MDR_TO_TEMP, MicroCycle.PC_INC],
         // 7 |  @X(R) 
-        [MicroCycle.EA_INDEX_ADDR, MicroCycle.EA_INDEX_WORD, MicroCycle.EA_DEFERRED, MicroCycle.EA_UNI_LATCH, MicroCycle.PC_INC],
+        [MicroCycle.PC_TO_MAR, MicroCycle.MDR_INDEX_MAR_WORD, MicroCycle.MDR_TO_MAR, MicroCycle.MDR_TO_TEMP, MicroCycle.PC_INC],
     ];
 
 }

@@ -9,11 +9,12 @@ public partial class DecoderMux
     {
         Decoded decoded = new()
         {
-            EncodedRegisters = [(Register)(ir & 0x7), Register.PC],
+            Registers = [(Register)(ir & 0x7), Register.PC],
         };
 
         decoded.MicroCycles.AddRange(AddressEngine[(ir >> 3) & 0x7]);
-        decoded.MicroCycles.Add(MicroCycle.COMMIT_SECOND);
+        decoded.MicroCycles.Add(MicroCycle.INDEX_TOGGLE);
+        decoded.MicroCycles.Add(MicroCycle.TMP_TO_REG);
         return decoded;
     }
 
@@ -21,21 +22,21 @@ public partial class DecoderMux
     {
         Decoded decoded = new()
         {
-            EncodedRegisters = [(Register)((ir >> 6)  & 0x7), (Register)(ir & 0x7)],
+            Registers = [(Register)((ir >> 6)  & 0x7), (Register)(ir & 0x7)],
             Operation = Operation.SUB,
             UniBusMode = UniBusDriving.WRITE_WORD,
         };
         
-        // PUSH RN
-        decoded.MicroCycles.Add(MicroCycle.COMMIT_TMP);
-        decoded.MicroCycles.Add(MicroCycle.COMMIT_SP);
-        decoded.MicroCycles.Add(MicroCycle.UNIBUS_DRIVE_SP);
-        decoded.MicroCycles.Add(MicroCycle.COMMIT_RN);
+        decoded.MicroCycles.Add(MicroCycle.REG_TO_TEMP);
+        decoded.MicroCycles.Add(MicroCycle.REG_ALU);
+        decoded.MicroCycles.Add(MicroCycle.REG_TO_MAR);
+        decoded.MicroCycles.Add(MicroCycle.PC_TO_REG);
         
-        decoded.MicroCycles.Add(MicroCycle.EA_TOGGLE);
+        decoded.MicroCycles.Add(MicroCycle.INDEX_TOGGLE);
         
         decoded.MicroCycles.AddRange(AddressEngine[(ir >> 3) & 0x7]);
-        decoded.MicroCycles.Add(MicroCycle.COMMIT_PC);
+        
+        decoded.MicroCycles.Add(MicroCycle.DST_TO_PC);
 
         return decoded;
     }
@@ -44,18 +45,15 @@ public partial class DecoderMux
     {
         Decoded decoded = new()
         {
-            EncodedRegisters = [(Register)(ir & 0x7), Register.PC],
+            Registers = [(Register)(ir & 0x7)],
             Operation = Operation.ADD,
             UniBusMode = UniBusDriving.READ_WORD,
         };
         
-        decoded.MicroCycles.Add(MicroCycle.COMMIT_TMP);
-        decoded.MicroCycles.Add(MicroCycle.COMMIT_PC);
-        
-        // POP RN
-        decoded.MicroCycles.Add(MicroCycle.UNIBUS_DRIVE_SP);
-        decoded.MicroCycles.Add(MicroCycle.UNIBUS_LATCH);
-        
+        decoded.MicroCycles.Add(MicroCycle.REG_TO_PC);
+        decoded.MicroCycles.Add(MicroCycle.REG_TO_MAR);
+        decoded.MicroCycles.Add(MicroCycle.MDR_TO_REG);
+        decoded.MicroCycles.Add(MicroCycle.REG_ALU);
         return decoded;
     }
 }

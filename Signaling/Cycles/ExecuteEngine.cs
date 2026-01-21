@@ -6,7 +6,7 @@ public partial class ControlUnitRom
 {
     private static SignalSet HALT() => new();
     
-    private static SignalSet EXECUTE_LATCH() => new()
+    private static SignalSet EXECUTE_EA() => new()
     {
         CpuBusDriver = Register.TMP,
         AluAction = new AluAction(decoded.Operation, Register.DST, 0),

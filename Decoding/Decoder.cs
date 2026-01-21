@@ -4,10 +4,12 @@ using Multiplexer;
 
 public class Decoder : DecoderMux
 {
-    private readonly MicroCycle[] FixedOpcodes =
-    [
-        MicroCycle.HALT, // 0x1
-    ];
+
+    private readonly Dictionary<ushort, MicroCycle> FixedOpcodes = new()
+    {
+        {0x00, MicroCycle.HALT}, // HALT
+        {0xA0, MicroCycle.EMPTY} // NOP
+    };
     
     public Decoded Decode(ushort ir)
     {
@@ -23,17 +25,20 @@ public class Decoder : DecoderMux
             || ir >> 6 is 3 or 0x37)
             return ONE_OPERAND(ir);
         
+        if(ir >> 6 == 1)
+            return JMP(ir);
+        
+        switch (ir >> 9)
+        {
+            case 0x4: return JSR(ir);
+            case 0x3F: return SOB(ir);
+        }
+        
+        if (ir >> 3 == 0x10)
+            return RTS(ir);
+        
         if (((fzzz == 0 && zfzz >= 1) || fzzz == 8) && zfzz <= 7)
             return BRANCH(ir);
-        
-        if (ir >> 8 == 0x7E)
-            return SOB(ir);
-
-        switch (ir >> 6)
-        {
-            case 1: return JMP(ir);
-            case 4: return JSR(ir);
-        }
         
         if((ir & 0xFC00) == 0)
             return PSW(ir);

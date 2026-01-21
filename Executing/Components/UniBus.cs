@@ -33,8 +33,16 @@ public class UniBus
                 data = requester.Data;
                 operation = requester.Operation;
                 
+                
+                if(operation == UniBusDriving.WRITE_WORD)
+                    Console.WriteLine("REQUESTERRRR");
+                
                 requesters[i] = null;
                 respondPermit = true;
+                
+                Console.WriteLine(address);
+                Console.WriteLine(data);
+
                 
                 return;
             }
