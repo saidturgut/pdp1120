@@ -32,7 +32,7 @@ public partial class ControlUnitRom
         EA_TOGGLE,
         
         EXECUTE_LATCH, EXECUTE_FLAGS, EXECUTE_PSW,
-        COMMIT_BRANCH,
+        COMMIT_DEC, COMMIT_BRANCH,
         COMMIT_ONE, COMMIT_TWO, COMMIT_RAM,
     ];
 }
@@ -51,6 +51,6 @@ public enum MicroCycle
     EA_TOGGLE,
         
     EXECUTE_LATCH, EXECUTE_FLAGS, EXECUTE_PSW,
-    COMMIT_BRANCH,
+    COMMIT_DEC, COMMIT_BRANCH,
     COMMIT_ONE, COMMIT_TWO, COMMIT_RAM,
 }

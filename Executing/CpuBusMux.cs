@@ -24,7 +24,7 @@ public partial class DataPath
             cpuBus = aluBus;
 
         if(signals.Condition != Condition.NONE)
-            if(CheckCondition()) return;
+            if(!CheckCondition()) return;
         
         Access(signals.CpuBusLatcher).Set(cpuBus.Get());
     }

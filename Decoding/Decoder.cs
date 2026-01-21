@@ -22,12 +22,15 @@ public class Decoder : DecoderMux
         if ((fzzz is 0 or 8 && zfzz is >= 0xA and <= 0xC) 
             || ir >> 6 is 3 or 0x37)
             return ONE_OPERAND(ir);
-
-        if((ir & 0xFC00) == 0)
-            return PSW(ir);
-
+        
         if (((fzzz == 0 && zfzz >= 1) || fzzz == 8) && zfzz <= 7)
             return BRANCH(ir);
+        
+        if (ir >> 8 == 0x7E)
+            return SOB(ir);
+        
+        if((ir & 0xFC00) == 0)
+            return PSW(ir);
         
         throw new Exception($"ILLEGAL OPCODE ON ROW {fzzz}, COLUMN  {zfzz}");
     }

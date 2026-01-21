@@ -6,6 +6,8 @@ using Components;
 public partial class DataPath
 {
     private readonly ControlWord Cw = new ();
+
+    private bool zeroLatch;
     
     public void PswAction()
     {
@@ -34,6 +36,8 @@ public partial class DataPath
         Condition.BGT => !Cw.Zero && Cw.Negative == Cw.Overflow,
         Condition.BLOS => Cw.Carry || Cw.Zero,
         Condition.BHI => !Cw.Carry && !Cw.Zero,
+        
+        Condition.SOB => !zeroLatch,
         
         Condition.NONE => throw new Exception("MISSING CONDITION!!"),
         _ => throw new Exception("INVALID CONDITION!!")

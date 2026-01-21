@@ -21,11 +21,18 @@ public partial class ControlUnitRom
     private static SignalSet COMMIT_RAM() => new()
         { UniBusDriving = GetWriteMode(), };
     
+    private static SignalSet COMMIT_DEC() => new()
+    {
+        CpuBusDriver = decoded.Drivers[0],
+        AluAction = new AluAction(Operation.DEC, Register.NONE, 0),
+        CpuBusLatcher = decoded.Drivers[0],
+    };
+    
     private static SignalSet COMMIT_BRANCH() => new()
     {
         CpuBusDriver = Register.R7,
         
-        AluAction = new AluAction(Operation.BRANCH, Register.NONE, decoded.CycleLatch),
+        AluAction = new AluAction(decoded.Operation, Register.NONE, decoded.CycleLatch),
         Condition = decoded.Condition,
         
         CpuBusLatcher = Register.R7,

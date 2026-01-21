@@ -15,7 +15,7 @@ public class Alu : AluRom
             ? output.Result : output.Result & 0xFF);
         if((result & x8000) != 0) 
             output.Flags |= (ushort)PswFlag.Negative;
-        if(result == 0) 
+        if(result == 0)
             output.Flags |= (ushort)PswFlag.Zero;
 
         if (input.ByteMode)

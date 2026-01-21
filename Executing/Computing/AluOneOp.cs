@@ -67,5 +67,5 @@ public partial class AluRom
     }
 
     private static AluOutput BRANCH(AluInput input) => new()
-        { Result = (ushort)(input.A + (sbyte)input.B) };
+        { Result = (ushort)(input.A + (((sbyte)input.B) << 1)) };
 }

@@ -40,7 +40,8 @@ public enum Condition
 {
     NONE, 
     BR, BNE, BEQ, BGE, BLT, BGT, BLE, 
-    BPL, BMI, BHI, BLOS, BVC, BVS, BCC, BCS
+    BPL, BMI, BHI, BLOS, BVC, BVS, BCC, BCS,
+    SOB,
 }
 
 public enum PswOperation
