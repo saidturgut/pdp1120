@@ -10,7 +10,7 @@ public partial class DecoderMux
         // ASSIGN ESSENTIALS
         Decoded decoded = new()
         {
-            Drivers = [(Register)(ir & 0x7)],
+            EncodedRegisters = [(Register)(ir & 0x7)],
             
             Operation = ((ir >> 6) & 0x3F)  switch
             {
@@ -42,7 +42,7 @@ public partial class DecoderMux
         // COMMIT ENGINE
         if (decoded.Operation is not Operation.PASS)
             decoded.MicroCycles.Add(
-                ((ir >> 3) & 0x7) == 0 ? MicroCycle.COMMIT_ONE : MicroCycle.COMMIT_RAM);
+                ((ir >> 3) & 0x7) == 0 ? MicroCycle.COMMIT_FIRST : MicroCycle.COMMIT_RAM);
         
         return decoded;
     }

@@ -22,7 +22,7 @@ public partial class DecoderMux
         // ASSIGN ESSENTIALS
         Decoded decoded = new()
         {
-            Drivers = [(Register)((ir >> 6)  & 0x7), (Register)(ir & 0x7)],
+            EncodedRegisters = [(Register)((ir >> 6)  & 0x7), (Register)(ir & 0x7)],
             Operation = TwoOperandTable[(ushort)type],
             FlagMask = FlagMasks.Table[type == TwoOperandType.MOV ? FlagMask.NZO : FlagMask.NZOC],
         };
@@ -43,7 +43,7 @@ public partial class DecoderMux
         if (type is not (TwoOperandType.CMP or TwoOperandType.BIT))
         {
             decoded.MicroCycles.Add(
-                ((ir >> 3) & 0x7) == 0 ? MicroCycle.COMMIT_TWO : MicroCycle.COMMIT_RAM
+                ((ir >> 3) & 0x7) == 0 ? MicroCycle.COMMIT_SECOND : MicroCycle.COMMIT_RAM
             );
         }
         

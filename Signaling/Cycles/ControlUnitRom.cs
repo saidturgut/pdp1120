@@ -8,7 +8,7 @@ public partial class ControlUnitRom
 
     private static byte GetStepSize()
         => (byte)(decoded.CycleMode != CycleMode.BYTE_MODE || 
-                  (decoded.Drivers[registersIndex] is Register.R7 or Register.R6) ? 2 : 1);
+                  (decoded.EncodedRegisters[registersIndex] is Register.PC or Register.SP) ? 2 : 1);
 
     private static UniBusDriving GetReadMode()
         => decoded.CycleMode != CycleMode.BYTE_MODE
@@ -33,7 +33,7 @@ public partial class ControlUnitRom
         
         EXECUTE_LATCH, EXECUTE_FLAGS, EXECUTE_PSW,
         COMMIT_DEC, COMMIT_BRANCH,
-        COMMIT_ONE, COMMIT_TWO, COMMIT_RAM,
+        COMMIT_FIRST, COMMIT_SECOND, COMMIT_RAM,
     ];
 }
 
@@ -52,5 +52,5 @@ public enum MicroCycle
         
     EXECUTE_LATCH, EXECUTE_FLAGS, EXECUTE_PSW,
     COMMIT_DEC, COMMIT_BRANCH,
-    COMMIT_ONE, COMMIT_TWO, COMMIT_RAM,
+    COMMIT_FIRST, COMMIT_SECOND, COMMIT_RAM,
 }

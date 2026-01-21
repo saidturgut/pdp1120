@@ -38,7 +38,7 @@ public partial class DataPath
         Access(Register.R3).Set(0x300);
         Access(Register.R4).Set(0x400);
         Access(Register.R5).Set(0x500);
-        Access(Register.R6).Set(0x1000);
+        Access(Register.SP).Set(0x1000);
         //Access(Register.R7).Set(0x2000);
         //Access(Register.PSW).Set(0xFFFF);
     }
@@ -61,8 +61,8 @@ public partial class DataPath
     public void Debug()
     {
         ushort flags = Access(Register.PSW).Get();
-        Console.WriteLine($"PC: {O(Access(Register.R7).Get())}");
-        Console.WriteLine($"SP: {O(Access(Register.R6).Get())}");
+        Console.WriteLine($"PC: {O(Access(Register.PC).Get())}");
+        Console.WriteLine($"SP: {O(Access(Register.SP).Get())}");
         for (int i = 0; i < 6; i++) Console.WriteLine($"R{i}: {O(Access((Register)i).Get())}");
         Console.WriteLine($"MDR: {O(Access(Register.MDR).Get())}");
         Console.WriteLine($"IR: {O(Access(Register.IR).Get())}");

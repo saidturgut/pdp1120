@@ -28,6 +28,12 @@ public class Decoder : DecoderMux
         
         if (ir >> 8 == 0x7E)
             return SOB(ir);
+
+        switch (ir >> 6)
+        {
+            case 1: return JMP(ir);
+            case 4: return JSR(ir);
+        }
         
         if((ir & 0xFC00) == 0)
             return PSW(ir);

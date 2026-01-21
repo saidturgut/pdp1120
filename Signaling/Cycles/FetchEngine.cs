@@ -8,16 +8,16 @@ public partial class ControlUnitRom
 
     private static SignalSet FETCH_READ() => new()
     {
-        CpuBusDriver = Register.R7,
+        CpuBusDriver = Register.PC,
         CpuBusLatcher = Register.MAR,
         UniBusDriving = UniBusDriving.READ_WORD,
     };
 
     private static SignalSet PC_INC() => new()
     {
-        CpuBusDriver = Register.R7,
+        CpuBusDriver = Register.PC,
         AluAction = new AluAction(Operation.ADD, Register.NONE, 2),
-        CpuBusLatcher = Register.R7,
+        CpuBusLatcher = Register.PC,
     };
 
     private static SignalSet FETCH_LATCH() => new()

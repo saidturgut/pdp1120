@@ -5,10 +5,12 @@ using Signaling;
 
 public struct Decoded()
 {
-    public Register[] Drivers = new Register[2];
+    public Register[] EncodedRegisters = new Register[2];
 
     public Condition Condition = Condition.NONE;
     public Operation Operation = Operation.NONE;
+    
+    public UniBusDriving UniBusMode = UniBusDriving.NONE;
     
     public PswFlag FlagMask = PswFlag.None;
     
