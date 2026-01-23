@@ -6,6 +6,8 @@ public partial class DataPath
 {
     public void Init()
     {
+        Psw.PswRegister = Access(Register.PSW);
+        
         Access(Register.R0).Debug(0x00FF);
         Access(Register.R1).Debug(0x0F00);
         Access(Register.R2).Debug(0x200);
@@ -19,7 +21,7 @@ public partial class DataPath
 
     public void Debug()
     {
-        ushort flags = Psw.Get();
+        ushort flags = Access(Register.PSW).Get();
         Console.WriteLine($"PC: {O(Access(Register.PC).Get())}");
         Console.WriteLine($"SP_K: {O(Access(Register.SP_K).Get())}");
         Console.WriteLine($"SP_U: {O(Access(Register.SP_U).Get())}");

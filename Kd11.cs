@@ -13,7 +13,6 @@ public class Kd11
     private readonly MicroUnit MicroUnit = new();
     
     public bool HALT { get; private set; }
-    public bool START { get; private set; }
     
     public void Init()
     {

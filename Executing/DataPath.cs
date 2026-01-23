@@ -26,6 +26,8 @@ public partial class DataPath
         new (), // VEC * 13
         
         new (), // SP_K * 14 
+        
+        new (), // PSW * 15
     ];
     
     private SignalSet Signals = new ();
@@ -62,10 +64,7 @@ public partial class DataPath
             if (!trapUnit.ABORT) register.Commit();
             register.Init();
         }
-
-        if (!trapUnit.ABORT) Psw.Commit();
-        Psw.Init();
-
+        
         if (SUPPRESSED != 0) SUPPRESSED--;
     }
 }

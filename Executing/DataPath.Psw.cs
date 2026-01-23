@@ -5,26 +5,24 @@ using Components;
 
 public partial class DataPath
 {
-    private readonly Psw Psw = new ();
-
+    private readonly Psw Psw = new();
+    
     private bool zeroLatch;
     
     public void StatusWord(TrapUnit trapUnit, bool START)
-    {        
+    {  
         if (START)
         {
             if(Signals.SuppressTrace) SUPPRESSED = 2;
             
-            Psw.SetMask(PswFlag.PMOD1 | PswFlag.PMOD2);
-            Psw.Set((ushort)(Psw.CMOD == Mode.KERNEL ? 0 : 0xFFFF));
+            Psw.Set((ushort)(Psw.CMOD == Mode.KERNEL ? 0 : 0xFFFF), 
+                PswFlag.PMOD1 | PswFlag.PMOD2);
             
             if (trapUnit.TRAP)
             {
-                Psw.SetMask(PswFlag.CMOD1 | PswFlag.CMOD2);
-                Psw.Set(0); // ENTER KERNEL MODE ON TRAPS
+                Psw.Set(0, PswFlag.CMOD1 | PswFlag.CMOD2); // ENTER KERNEL MODE ON TRAPS
             }
         }
-        Psw.SetMask(Signals.FlagMask);
         
         if (Psw.TRACE && !trapUnit.TRAP && SUPPRESSED == 0)
             trapUnit.Request(TrapVector.TRACE);
@@ -40,7 +38,7 @@ public partial class DataPath
     {
         if (Signals.PswAction is not null)
         {
-            Psw.Set(Signals.PswAction.Value.Buffer);
+            Psw.Set(Signals.PswAction.Value.Buffer, Signals.FlagMask);
         }
     }
 

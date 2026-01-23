@@ -11,8 +11,7 @@ public partial class DataPath
         if(Signals.CpuBusDriver is Register.NONE)
             return;
 
-        ushort value = Signals.CpuBusDriver != Register.PSW 
-            ? Access(Signals.CpuBusDriver).Get() : Psw.Get();
+        ushort value = Access(Signals.CpuBusDriver).Get();
         
         cpuBus.Set((ushort)(!Signals.UseByteMode ? value : value & 0x00FF));
     }
@@ -27,13 +26,9 @@ public partial class DataPath
 
         if(Signals.Condition != Condition.NONE)
             if(!CheckCondition()) return;
-
-        if (Signals.CpuBusLatcher == Register.PSW)
-        {
-            Psw.SetMask(FlagMasks.Table[FlagMask.ALL]);
-            Psw.Set(cpuBus.Get()); return;
-        }
         
         Access(Signals.CpuBusLatcher).Set(cpuBus.Get());
+        
+        Psw.Update(Access(Register.PSW).Get());
     }
 }

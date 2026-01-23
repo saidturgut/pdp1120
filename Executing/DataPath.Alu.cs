@@ -36,7 +36,7 @@ public partial class DataPath
         if(action.StepSize == 0) 
             zeroLatch = (output.Flags & (ushort)PswFlag.ZERO) != 0;
         
-        Psw.Set(output.Flags);
+        Psw.Set(output.Flags, Signals.FlagMask);
     }
 
     private ushort InputMask(ushort target)

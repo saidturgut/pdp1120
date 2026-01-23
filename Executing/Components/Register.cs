@@ -2,8 +2,8 @@ namespace pdp11_emulator.Executing.Components;
 
 public class RegisterObject
 {
-    protected ushort committed;
-    protected ushort value;
+    private ushort committed;
+    private ushort value;
 
     public void Init()
         => value = committed;
@@ -14,7 +14,7 @@ public class RegisterObject
         committed = value;
     }
     
-    public virtual void Set(ushort input)
+    public void Set(ushort input)
         => value = input;
 
     public ushort Get() 

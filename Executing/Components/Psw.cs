@@ -1,6 +1,6 @@
 namespace pdp11_emulator.Executing.Components;
 
-public class Psw : RegisterObject
+public class Psw
 {
     public bool CARRY { get; private set; }
     public bool OVERFLOW { get; private set; }
@@ -15,30 +15,27 @@ public class Psw : RegisterObject
     public Mode PMOD { get; private set; } 
     public Mode CMOD { get; private set; }
 
-    private PswFlag FlagMask = PswFlag.NONE;
+    public RegisterObject? PswRegister;
 
-    public void SetMask(PswFlag mask)
-        => FlagMask = mask;
-    
-    public override void Set(ushort input)
+    public void Set(ushort input, PswFlag flagMask)
     {
-        value = (ushort)((value & (ushort)~FlagMask) | (input & (ushort)FlagMask));
-        Update();
+        PswRegister!.Set((ushort)((PswRegister.Get() & (ushort)~flagMask) | (input & (ushort)flagMask)));
+        Update(input);
     }
 
-    private void Update()
+    public void Update(ushort input)
     {
-        CARRY = (value & (ushort)PswFlag.CARRY) != 0;
-        OVERFLOW = (value & (ushort)PswFlag.OVERFLOW) != 0;
-        ZERO = (value & (ushort)PswFlag.ZERO) != 0;
-        NEGATIVE = (value & (ushort)PswFlag.NEGATIVE) != 0;
+        CARRY = (input & (ushort)PswFlag.CARRY) != 0;
+        OVERFLOW = (input & (ushort)PswFlag.OVERFLOW) != 0;
+        ZERO = (input & (ushort)PswFlag.ZERO) != 0;
+        NEGATIVE = (input & (ushort)PswFlag.NEGATIVE) != 0;
         
-        TRACE = (value & (ushort)PswFlag.TRACE) != 0;
+        TRACE = (input & (ushort)PswFlag.TRACE) != 0;
         
-        PRIORITY = (byte)(((value & (ushort)PswFlag.P7) | (value & (ushort)PswFlag.P6) | (value & (ushort)PswFlag.P5)) >> 5);
+        PRIORITY = (byte)(((input & (ushort)PswFlag.P7) | (input & (ushort)PswFlag.P6) | (input & (ushort)PswFlag.P5)) >> 5);
 
-        PMOD = (Mode)(((value & (ushort)PswFlag.PMOD1) | (value & (ushort)PswFlag.PMOD2)) >> 12);
-        CMOD = (Mode)(((value & (ushort)PswFlag.CMOD1) | (value & (ushort)PswFlag.CMOD2)) >> 14);
+        PMOD = (Mode)(((input & (ushort)PswFlag.PMOD1) | (input & (ushort)PswFlag.PMOD2)) >> 12);
+        CMOD = (Mode)(((input & (ushort)PswFlag.CMOD1) | (input & (ushort)PswFlag.CMOD2)) >> 14);
     }
 }
 
