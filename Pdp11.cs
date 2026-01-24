@@ -11,10 +11,9 @@ public class Pdp11
     private readonly UniBus UniBus = new ();
     private readonly TrapUnit TrapUnit = new();
 
-    // REQUESTERS
     private readonly Kd11 Kd11 = new ();
     
-    // RESPONDERS
+    private readonly Mmu Mmu = new();
     private readonly Rom Rom = new ();
     private readonly Ram Ram = new ();
     
@@ -27,6 +26,7 @@ public class Pdp11
     private void Clock()
     {
         Rom.Boot(Ram);
+        Mmu.Init(true);
         
         Kd11.Init();
         
@@ -63,11 +63,12 @@ public class Pdp11
         }
 
         // REQUESTERS
-        Kd11.Tick(UniBus, TrapUnit);
+        Kd11.Tick(UniBus, Mmu, TrapUnit);
         
         UniBus.ArbitrateData();
 
         // RESPONDERS
+        Mmu.Respond(UniBus);
         Ram.Respond(UniBus, TrapUnit);
         
         HALT = Kd11.HALT;
@@ -77,6 +78,7 @@ public class Pdp11
 
     private void Commit()
     {
+        Mmu.Commit(TrapUnit.ABORT);
         Ram.Commit(TrapUnit.ABORT);
 
         Kd11.COMMIT = false;

@@ -6,14 +6,14 @@ public partial class DataPath
 {
     private void DebugInit()
     {
-        Access(Register.R0).Debug(0x00FF);
-        Access(Register.R1).Debug(0x0F00);
-        Access(Register.R2).Debug(0x200);
-        Access(Register.R3).Debug(0x300);
-        Access(Register.R4).Debug(0x400);
-        Access(Register.R5).Debug(0x500);
-        Access(Register.SP_U).Debug(0x1000);
-        Access(Register.SP_K).Debug(0x20);
+        Access(Register.R0).Init(0x00FF);
+        Access(Register.R1).Init(0x0F00);
+        Access(Register.R2).Init(0x200);
+        Access(Register.R3).Init(0x300);
+        Access(Register.R4).Init(0x400);
+        Access(Register.R5).Init(0x500);
+        Access(Register.SP_U).Init(0x1000);
+        Access(Register.SP_K).Init(0x20);
         //Access(Register.R7).Debug(0x2000);
     }
 

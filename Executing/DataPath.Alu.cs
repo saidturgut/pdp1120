@@ -33,8 +33,7 @@ public partial class DataPath
         aluBus.Set(output.Result);
         
         // SET FLAGS
-        if(action.StepSize == 0) 
-            zeroLatch = (output.Flags & (ushort)PswFlag.ZERO) != 0;
+        if(action.StepSize == 0) Psw.ZERO_LATCH = (output.Flags & (ushort)PswFlag.ZERO) != 0;
         
         Psw.Set(output.Flags, Signals.FlagMask);
     }

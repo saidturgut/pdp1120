@@ -20,7 +20,7 @@ public class Kd11
         DataPath.Init();
     }
     
-    public void Tick(UniBus uniBus, TrapUnit trapUnit)
+    public void Tick(UniBus uniBus, Mmu mmu, TrapUnit trapUnit)
     {
         DataPath.Clear(CpuBus, AluBus);
         DataPath.Receive(MicroUnit, trapUnit);
@@ -32,7 +32,7 @@ public class Kd11
         DataPath.AluAction(CpuBus, AluBus);
         DataPath.PswAction();
         DataPath.CpuBusLatch(CpuBus, AluBus);
-        DataPath.UniBusDrive(uniBus, trapUnit, MicroUnit.FETCH());
+        DataPath.UniBusDrive(uniBus, mmu, trapUnit, MicroUnit.FETCH());
 
         DataPath.Debug();
         

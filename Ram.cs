@@ -36,8 +36,6 @@ public class Ram
                 WriteWord(uniBus.GetAddress(), uniBus.GetData(), trapUnit); break;
             case UniBusDriving.WRITE_BYTE:
                 WriteByte(uniBus.GetAddress(), (byte)uniBus.GetData()); break;
-            default:
-                throw new Exception("UNKNOWN OPERATION!");
         } 
     }
     

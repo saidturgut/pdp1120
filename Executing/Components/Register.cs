@@ -4,11 +4,8 @@ public class RegisterObject
 {
     private ushort committed;
     private ushort value;
-
-    public void Init()
-        => value = committed;
     
-    public void Debug(ushort input)
+    public void Init(ushort input)
     {
         value = input;
         committed = value;
@@ -20,8 +17,13 @@ public class RegisterObject
     public ushort Get() 
         => value;
     
-    public void Commit()
+    public void Commit(bool abort)
     {
-        committed = value;
+        if (!abort)
+        {
+            committed = value;
+        }
+        
+        value = committed;
     }
 }

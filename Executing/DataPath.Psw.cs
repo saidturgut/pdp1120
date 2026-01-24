@@ -8,8 +8,6 @@ public partial class DataPath
     private readonly Psw Psw = new();
     
     private byte SUPPRESSED;
-
-    private bool zeroLatch;
     
     public void StatusWord(bool START, TrapUnit trapUnit)
     {  
@@ -65,7 +63,7 @@ public partial class DataPath
         Condition.BLOS => Psw.CARRY || Psw.ZERO,
         Condition.BHI => !Psw.CARRY && !Psw.ZERO,
         
-        Condition.SOB => !zeroLatch,
+        Condition.SOB => !Psw.ZERO_LATCH,
         
         _ => throw new Exception("INVALID CONDITION!!")
     };

@@ -5,6 +5,9 @@ public class Psw
     public bool CARRY { get; private set; }
     public bool OVERFLOW { get; private set; }
     public bool ZERO { get; private set; }
+    
+    public bool ZERO_LATCH;
+    
     public bool NEGATIVE { get; private set; }
     
     public bool TRACE { get; private set; }
@@ -14,7 +17,7 @@ public class Psw
     // 00 KERNEL, 11 USER
     public Mode PMOD { get; private set; } 
     public Mode CMOD { get; private set; }
-
+    
     public RegisterObject? PswRegister;
 
     public void Set(ushort input, PswFlag flagMask)

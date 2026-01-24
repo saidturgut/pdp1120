@@ -34,7 +34,6 @@ public partial class DataPath
     
     public void Init()
     {
-        Mmu.Init(true);
         Psw.PswRegister = Access(Register.PSW);
 
         DebugInit();
@@ -60,16 +59,9 @@ public partial class DataPath
         trapUnit.Arbitrate();
 
         Access(Register.VEC).Set(trapUnit.VECTOR);
-        
-        foreach (RegisterObject register in Registers)
-        {
-            if (!trapUnit.ABORT) 
-                register.Commit();
-            
-            register.Init();
-        }
-        
-        Mmu.Commit(trapUnit.ABORT);
+
+        foreach (RegisterObject register in Registers) 
+            register.Commit(trapUnit.ABORT);
         
         if (SUPPRESSED != 0) SUPPRESSED--;
     }
