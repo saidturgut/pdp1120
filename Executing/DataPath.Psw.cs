@@ -5,6 +5,10 @@ using Components;
 
 public partial class DataPath
 {
+    private readonly Psw Psw = new();
+    
+    private byte SUPPRESSED;
+
     private bool zeroLatch;
     
     public void StatusWord(bool START, TrapUnit trapUnit)

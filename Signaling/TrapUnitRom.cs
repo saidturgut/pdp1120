@@ -23,12 +23,15 @@ public class TrapUnitRom
 
 public enum TrapVector
 {
+    NONE,
     ODD_ADDRESS, BUS_ERROR, // 0
     ILLEGAL_INSTRUCTION, // 1
     PRIVILEGED_INSTRUCTION, // 1
     BPT, TRACE,  // 3
     IOT, // 4
     EMT, TRAP, // 5
+    
+    INVALID_SEGMENT, WRITE_VIOLATION, LENGTH_VIOLATION
 }
 
 public struct Trap()

@@ -30,12 +30,15 @@ public partial class DataPath
         new (), // PSW * 15
     ];
     
-    private readonly Psw Psw = new();
-    
     private SignalSet Signals = new ();
     
-    public bool STALL { get; private set; }
-    private byte SUPPRESSED;
+    public void Init()
+    {
+        Mmu.Init(true);
+        Psw.PswRegister = Access(Register.PSW);
+
+        DebugInit();
+    }
     
     public void Clear(TriStateBus cpuBus, TriStateBus aluBus)
     {
@@ -60,9 +63,13 @@ public partial class DataPath
         
         foreach (RegisterObject register in Registers)
         {
-            if (!trapUnit.ABORT) register.Commit();
+            if (!trapUnit.ABORT) 
+                register.Commit();
+            
             register.Init();
         }
+        
+        Mmu.Commit(trapUnit.ABORT);
         
         if (SUPPRESSED != 0) SUPPRESSED--;
     }

@@ -13,6 +13,7 @@ public class Kd11
     private readonly MicroUnit MicroUnit = new();
     
     public bool HALT { get; private set; }
+    public bool COMMIT;
     
     public void Init()
     {
@@ -31,7 +32,7 @@ public class Kd11
         DataPath.AluAction(CpuBus, AluBus);
         DataPath.PswAction();
         DataPath.CpuBusLatch(CpuBus, AluBus);
-        DataPath.UniBusDrive(uniBus);
+        DataPath.UniBusDrive(uniBus, trapUnit, MicroUnit.FETCH());
 
         DataPath.Debug();
         
@@ -47,5 +48,6 @@ public class Kd11
         uniBus.ArbitrateInterrupt(trapUnit, DataPath.GetPriority());
         DataPath.Commit(trapUnit);
         MicroUnit.Clear(trapUnit);
+        COMMIT = true;
     }
 }

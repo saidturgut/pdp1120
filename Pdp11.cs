@@ -1,5 +1,8 @@
+using System.Transactions;
+
 namespace pdp11_emulator;
 using Executing.Components;
+using Arbitrating.Memory;
 using Arbitrating;
 using Signaling;
 
@@ -44,7 +47,7 @@ public class Pdp11
         // TERMINAL REQUESTS INTERRUPT
         // DISK REQUESTS INTERRUPT
 
-        if (interrupter == 20)
+        if (interrupter == 20)// FOR DEBUGGING
         {
             UniBus.RequestInterrupt(new InterruptRequest()
             {
@@ -68,5 +71,14 @@ public class Pdp11
         Ram.Respond(UniBus, TrapUnit);
         
         HALT = Kd11.HALT;
+
+        if (Kd11.COMMIT) Commit();
+    }
+
+    private void Commit()
+    {
+        Ram.Commit(TrapUnit.ABORT);
+
+        Kd11.COMMIT = false;
     }
 }

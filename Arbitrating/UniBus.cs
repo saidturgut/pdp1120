@@ -5,7 +5,7 @@ public partial class UniBus
 {    
     public UniBusDriving Operation {get; private set;}
     
-    private ushort address;
+    private uint address;
     private ushort data;
     
     public bool respondPermit { get; private set; }
@@ -15,7 +15,7 @@ public partial class UniBus
         respondPermit = false;
     }
     
-    public ushort GetAddress()
+    public uint GetAddress()
         => address;
 
     public void SetData(ushort input)

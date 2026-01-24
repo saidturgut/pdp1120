@@ -1,4 +1,4 @@
-namespace pdp11_emulator;
+namespace pdp11_emulator.Arbitrating.Memory;
 using Utility;
 
 public class Rom

@@ -1,4 +1,4 @@
-namespace pdp11_emulator;
+namespace pdp11_emulator.Arbitrating.Memory;
 using Executing.Components;
 using Signaling;
 using Utility;
@@ -8,46 +8,14 @@ public class Ram
 {
     private readonly byte[] Memory = new byte[0x10000];
 
-    private const ushort startAddress = 0;
+    private readonly Dictionary<uint, byte> WriteRequests = new();
+    
+    private const uint startAddress = 0;
     
     public void LoadImage(byte[] image, bool hexDump)
     {
-        for (int i = 0; i < image.Length; i++)
+        for (uint i = 0; i < image.Length; i++)
             Memory[i + startAddress] = image[i];
-        
-        Memory[0x20] = 0x10;
-        Memory[0x21] = 0x00;
-        Memory[0x22] = 0xFF;
-        Memory[0x23] = 0xFF;
-        
-       // Memory[0x22] = 0x00;
-        //Memory[0x23] = 0xC0;
-        
-         /*Memory[0x100] = 0x20;
-         Memory[0x101] = 0x22;
-         Memory[0x102] = 0x22;
-         Memory[0x103] = 0x22;
-
-         Memory[0x1FE] = 0x34;
-         Memory[0x1FF] = 0x33;
-
-         Memory[0x300] = 0x44;
-         Memory[0x301] = 0x44;
-
-         Memory[0x404] = 0x55;
-         Memory[0x405] = 0x55;
-
-         Memory[0x500] = 0x00;
-         Memory[0x501] = 0x06;
-
-         Memory[0x600] = 0x78;
-         Memory[0x601] = 0x77;
-
-         Memory[0x2002] = 0x00;
-         Memory[0x2003] = 0x08;
-
-         Memory[0x0800] = 0x96;
-         Memory[0x0801] = 0x99;*/
         
         if (hexDump)
             HexDump.Write(Memory);
@@ -73,7 +41,7 @@ public class Ram
         } 
     }
     
-    private ushort ReadWord(ushort address, TrapUnit trapUnit)
+    private ushort ReadWord(uint address, TrapUnit trapUnit)
     {
         if (address % 2 != 0)
         {
@@ -84,7 +52,7 @@ public class Ram
         return (ushort)(Memory[address] | (Memory[address + 1] << 8));
     }
 
-    private void WriteWord(ushort address, ushort value, TrapUnit trapUnit)
+    private void WriteWord(uint address, ushort value, TrapUnit trapUnit)
     {
         if (address % 2 != 0)
         {
@@ -92,22 +60,34 @@ public class Ram
             return;
         }
 
-        Memory[address] = (byte)(value & 0xFF);
-        Memory[address + 1] = (byte)(value >> 8);
-
-        Console.WriteLine($"MEMORY [{O(address)}] : {O(value)}");
+        WriteRequests[address] = (byte)(value & 0xFF);
+        WriteRequests[address + 1] = (byte)(value >> 8);
     }
 
-    private byte ReadByte(ushort address) 
+    private byte ReadByte(uint address) 
         => Memory[address];
 
-    private void WriteByte(ushort address, byte value)
+    private void WriteByte(uint address, byte value)
     {
-        Memory[address] = value;
-        
-        Console.WriteLine($"MEMORY [{O(address)}] : {O(value)}");
+        WriteRequests[address] = value;
     }
 
-    private string O(int input)
+    public void Commit(bool abort)
+    {
+        if (abort)
+        {
+            WriteRequests.Clear();
+            return;
+        }
+        
+        foreach (uint address in WriteRequests.Keys)
+        {
+            Console.WriteLine($"MEMORY [{O(address)}] : {O(WriteRequests[address])}");
+            Memory[address] = WriteRequests[address];
+            WriteRequests.Remove(address);
+        }
+    }
+
+    private string O(uint input)
         => $"0x{Convert.ToString(input, 16).ToUpper()}";
 }

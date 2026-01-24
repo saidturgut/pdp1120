@@ -31,6 +31,7 @@ public partial class MicroUnit : MicroUnitRom
     }
 
     public bool START() => currentCycle == 0 && decoded.MicroCycles[currentCycle] is not MicroCycle.FETCH_READ;
+    public bool FETCH() => decoded.MicroCycles[currentCycle] is MicroCycle.FETCH_READ;
     
     public void Clear(TrapUnit trapUnit)
     {

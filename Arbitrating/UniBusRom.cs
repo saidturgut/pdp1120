@@ -4,7 +4,7 @@ using Signaling;
 public struct DataRequest
 {
     public byte Requester;
-    public ushort Address;
+    public uint Address;
     public ushort Data;
     public UniBusDriving Operation;
 }

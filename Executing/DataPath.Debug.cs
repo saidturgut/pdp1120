@@ -4,10 +4,8 @@ using Components;
 
 public partial class DataPath
 {
-    public void Init()
+    private void DebugInit()
     {
-        Psw.PswRegister = Access(Register.PSW);
-        
         Access(Register.R0).Debug(0x00FF);
         Access(Register.R1).Debug(0x0F00);
         Access(Register.R2).Debug(0x200);
