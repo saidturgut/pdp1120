@@ -20,22 +20,24 @@ public class Psw
     public void Set(ushort input, PswFlag flagMask)
     {
         PswRegister!.Set((ushort)((PswRegister.Get() & (ushort)~flagMask) | (input & (ushort)flagMask)));
-        Update(input);
+        Update();
     }
 
-    public void Update(ushort input)
+    public void Update()
     {
-        CARRY = (input & (ushort)PswFlag.CARRY) != 0;
-        OVERFLOW = (input & (ushort)PswFlag.OVERFLOW) != 0;
-        ZERO = (input & (ushort)PswFlag.ZERO) != 0;
-        NEGATIVE = (input & (ushort)PswFlag.NEGATIVE) != 0;
+        ushort psw = PswRegister!.Get();
         
-        TRACE = (input & (ushort)PswFlag.TRACE) != 0;
+        CARRY = (psw & (ushort)PswFlag.CARRY) != 0;
+        OVERFLOW = (psw & (ushort)PswFlag.OVERFLOW) != 0;
+        ZERO = (psw & (ushort)PswFlag.ZERO) != 0;
+        NEGATIVE = (psw & (ushort)PswFlag.NEGATIVE) != 0;
         
-        PRIORITY = (byte)(((input & (ushort)PswFlag.P7) | (input & (ushort)PswFlag.P6) | (input & (ushort)PswFlag.P5)) >> 5);
+        TRACE = (psw & (ushort)PswFlag.TRACE) != 0;
+        
+        PRIORITY = (byte)(((psw & (ushort)PswFlag.P7) | (psw & (ushort)PswFlag.P6) | (psw & (ushort)PswFlag.P5)) >> 5);
 
-        PMOD = (Mode)(((input & (ushort)PswFlag.PMOD1) | (input & (ushort)PswFlag.PMOD2)) >> 12);
-        CMOD = (Mode)(((input & (ushort)PswFlag.CMOD1) | (input & (ushort)PswFlag.CMOD2)) >> 14);
+        PMOD = (Mode)(((psw & (ushort)PswFlag.PMOD1) | (psw & (ushort)PswFlag.PMOD2)) >> 12);
+        CMOD = (Mode)(((psw & (ushort)PswFlag.CMOD1) | (psw & (ushort)PswFlag.CMOD2)) >> 14);
     }
 }
 

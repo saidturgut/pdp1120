@@ -20,6 +20,7 @@ public partial class DecoderMux
         MemoryMode = UniBusDriving.WRITE_WORD,
         
         FlagMask = FlagMasks.Table[FlagMask.ALL],
+        CycleLatch = 2,
         
         MicroCycles =
         [
@@ -44,12 +45,15 @@ public partial class DecoderMux
         ]
     };
     
-    protected static Decoded RTI(bool rtt) => new()
+    protected static Decoded RTI(ushort ir) => new()
     {
         Registers = [Register.PC, Register.PSW],
         Operation = Operation.ADD,
         MemoryMode = UniBusDriving.READ_WORD,
 
+        FlagMask = FlagMasks.Table[FlagMask.ALL],
+        CycleLatch = 2,
+        
         MicroCycles = 
         [
             MicroCycle.SP_TO_UNI,
@@ -61,8 +65,6 @@ public partial class DecoderMux
             MicroCycle.SP_ALU,
         ],
         
-        FlagMask = FlagMasks.Table[FlagMask.ALL],
-        
-        SuppressTrace = rtt,
+        SuppressTrace = ir == 6,
     };
 }

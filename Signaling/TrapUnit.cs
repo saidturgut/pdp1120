@@ -33,12 +33,12 @@ public class TrapUnit : TrapUnitRom
                 return;
             }
         }
+        TrapRequests = new TrapVector?[6];
         Clear();
     }
 
     public void Clear()
     {
-        TrapRequests =  new TrapVector?[5];
         VECTOR = 0;
         ABORT = false;
         TRAP = false;

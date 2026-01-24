@@ -1,4 +1,7 @@
+using pdp11_emulator.Decoding.Multiplexer;
+
 namespace pdp11_emulator.Signaling;
+using Executing.Components;
 using Decoding;
 using Cycles;
 
@@ -14,11 +17,11 @@ public partial class MicroUnit : MicroUnitRom
     public bool HALT { get; private set; }
     public bool BOUNDARY { get; private set; }
 
-    public SignalSet Emit(ushort ir, TrapUnit trapUnit)
+    public SignalSet Emit(ushort ir, TrapUnit trapUnit, Mode mode)
     {
         if (decoded.MicroCycles[currentCycle] is MicroCycle.DECODE)
         {
-            decoded = Decoder.Decode(ir, trapUnit);
+            decoded = Decoder.Decode(ir, trapUnit, mode);
             currentCycle = 0;
         }
         
@@ -27,13 +30,13 @@ public partial class MicroUnit : MicroUnitRom
         return MicroCycles[(int)decoded.MicroCycles[currentCycle]]();
     }
 
-    public bool START() => currentCycle == 0;
+    public bool START() => currentCycle == 0 && decoded.MicroCycles[currentCycle] is not MicroCycle.FETCH_READ;
     
     public void Clear(TrapUnit trapUnit)
     {
         if (trapUnit.TRAP) WAIT = false;
         
-        if(!WAIT) decoded = !trapUnit.TRAP ? Decoder.FETCH() : Decoder.TRAP();
+        if(!WAIT) decoded = !trapUnit.TRAP ? DecoderMux.FETCH() : DecoderMux.TRAP();
         
         registersIndex = 0;
         currentCycle = 0;

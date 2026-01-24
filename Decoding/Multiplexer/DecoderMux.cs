@@ -7,8 +7,6 @@ public partial class DecoderMux : DecoderRom
 {
     protected static byte fzzz;
     protected static byte zfzz;
-    protected static byte zzfz;
-    protected static byte zzzf;
 
     public static Decoded FETCH() => new()
         { MicroCycles = [MicroCycle.FETCH_READ, MicroCycle.PC_INC, MicroCycle.FETCH_LATCH, MicroCycle.DECODE] };

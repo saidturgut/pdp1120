@@ -22,9 +22,8 @@ public class Kd11
     public void Tick(UniBus uniBus, TrapUnit trapUnit)
     {
         DataPath.Clear(CpuBus, AluBus);
-        DataPath.Receive(
-        MicroUnit.Emit(DataPath.GetIr(), trapUnit));
-        DataPath.StatusWord(trapUnit, MicroUnit.START());
+        DataPath.Receive(MicroUnit, trapUnit);
+        DataPath.StatusWord(MicroUnit.START(), trapUnit);
         
         DataPath.UniBusLatch(uniBus);
         if(DataPath.STALL) return;

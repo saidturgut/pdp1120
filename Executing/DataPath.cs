@@ -30,8 +30,10 @@ public partial class DataPath
         new (), // PSW * 15
     ];
     
+    private readonly Psw Psw = new();
+    
     private SignalSet Signals = new ();
-
+    
     public bool STALL { get; private set; }
     private byte SUPPRESSED;
     
@@ -41,14 +43,11 @@ public partial class DataPath
         aluBus.Clear();
     }
 
-    public void Receive(SignalSet input) 
-        => Signals = input;
+    public void Receive(MicroUnit microUnit, TrapUnit trapUnit) 
+        => Signals = microUnit.Emit(Access(Register.IR).Get(), trapUnit, Psw.CMOD);
     
     private RegisterObject Access(Register register) 
         => Registers[(ushort)register];
-    
-    public ushort GetIr() 
-        => Registers[(ushort)Register.IR].Get();
     
     public byte GetPriority() 
         => Psw.PRIORITY;

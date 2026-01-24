@@ -29,6 +29,6 @@ public partial class DataPath
         
         Access(Signals.CpuBusLatcher).Set(cpuBus.Get());
         
-        Psw.Update(Access(Register.PSW).Get());
+        Psw.Update();
     }
 }

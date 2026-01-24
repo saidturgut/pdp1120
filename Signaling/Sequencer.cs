@@ -17,8 +17,6 @@ public partial class MicroUnit
 
         if (currentCycle == decoded.MicroCycles.Count - 1)
         {
-            if (trapUnit.TRAP) trapUnit.Clear();
-            
             BOUNDARY = true;
         }
         else

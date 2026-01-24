@@ -39,15 +39,15 @@ public partial class UniBus
         {
             if (InterruptRequests[i] != null)
             {
-                var requester = InterruptRequests[i]!.Value;
+                var request = InterruptRequests[i]!.Value;
 
-                if (requester.Priority > priorityLevel)
+                if (request.Priority > priorityLevel)
                 {
                     InterruptRequests[i] = null; 
                 }
                 else
                 {
-                    trapUnit.Request(requester.Vector);
+                    trapUnit.Request(request.Vector);
                     
                     InterruptRequests[i] = null;
                     return;

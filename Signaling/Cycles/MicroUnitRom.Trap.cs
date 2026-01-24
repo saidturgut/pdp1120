@@ -7,7 +7,7 @@ public partial class MicroUnitRom
     private static SignalSet SP_ALU() => new()
     {
         CpuBusDriver = Register.SP_U,
-        AluAction = new AluAction(decoded.Operation, Register.NONE, 2),
+        AluAction = new AluAction(decoded.Operation, Register.NONE, decoded.CycleLatch),
         CpuBusLatcher = Register.SP_U,
     };
         

@@ -17,7 +17,7 @@ public class Pdp11
     
     private bool HALT;
 
-    private int debugger;
+    private int interrupter;
     
     public void Power() => Clock();
 
@@ -29,7 +29,7 @@ public class Pdp11
         
         while (!HALT)
         {
-            debugger++;
+            //interrupter++;
             
             Tick();
             
@@ -44,7 +44,7 @@ public class Pdp11
         // TERMINAL REQUESTS INTERRUPT
         // DISK REQUESTS INTERRUPT
 
-        if (debugger == 20)
+        if (interrupter == 20)
         {
             UniBus.RequestInterrupt(new InterruptRequest()
             {
